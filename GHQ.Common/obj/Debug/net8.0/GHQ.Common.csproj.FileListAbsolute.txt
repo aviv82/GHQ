@@ -1,0 +1,12 @@
+/Users/Aviv/Desktop/GHQ/GHQ.Common/bin/Debug/net8.0/GHQ.Common.deps.json
+/Users/Aviv/Desktop/GHQ/GHQ.Common/bin/Debug/net8.0/GHQ.Common.dll
+/Users/Aviv/Desktop/GHQ/GHQ.Common/bin/Debug/net8.0/GHQ.Common.pdb
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.AssemblyInfoInputs.cache
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.AssemblyInfo.cs
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.csproj.CoreCompileInputs.cache
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.sourcelink.json
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.dll
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/refint/GHQ.Common.dll
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/GHQ.Common.pdb
+/Users/Aviv/Desktop/GHQ/GHQ.Common/obj/Debug/net8.0/ref/GHQ.Common.dll

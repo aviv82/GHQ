@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "IIHqGRRcXyqu8YgWkxIZN+NMpiW9T9vltltRK7XQIxQ=",
+  "Source": "GHQ.API",
+  "BasePath": "_content/GHQ.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
