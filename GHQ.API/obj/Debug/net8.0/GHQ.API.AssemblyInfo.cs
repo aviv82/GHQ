@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GHQ.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e63923b0d87f5658ae574aa4efe3e3f207be6d60")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1ca3d15f5ab6485756d3919faa4c2e5df0c5da6")]
 [assembly: System.Reflection.AssemblyProductAttribute("GHQ.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GHQ.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
