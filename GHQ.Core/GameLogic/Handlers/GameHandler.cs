@@ -156,20 +156,11 @@ public class GameHandler : IGameHandler
     {
         try
         {
-            var game = await _gameService.GetGameByIdIncludingPlayersAndCharacters(request.Id, cancellationToken);
+            var game = await _gameService.GetByIdAsync(request.Id, cancellationToken);
 
             if (game == null) { throw new Exception("Game not found"); };
 
-            game.Players = [];
-
-            foreach (var character in game.Characters)
-            {
-                await _characterService.DeleteAsync(character, cancellationToken);
-            }
-
-            await _gameService.UpdateAsync(game, cancellationToken);
-
-            await _gameService.DeleteAsync(game, cancellationToken);
+            await _gameService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

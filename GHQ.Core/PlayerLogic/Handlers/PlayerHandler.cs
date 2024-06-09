@@ -15,17 +15,13 @@ public class PlayerHandler : IPlayerHandler
 {
     private readonly IMapper _mapper;
     private readonly IPlayerService _playerService;
-    private readonly IGameService _gameService;
-
     public PlayerHandler(
         IMapper mapper,
-        IPlayerService playerService,
-        IGameService gameService
+        IPlayerService playerService
         )
     {
         _mapper = mapper;
         _playerService = playerService;
-        _gameService = gameService;
     }
     public async Task<PlayerListVm> GetAllPlayers(
         GetPlayerListQuery request,
@@ -119,17 +115,11 @@ public class PlayerHandler : IPlayerHandler
     {
         try
         {
-            var player = await _playerService.GetPlayerByIdIncludingGamesAndCharacters(request.Id, cancellationToken);
+            var player = await _playerService.GetByIdAsync(request.Id, cancellationToken);
 
             if (player == null) { throw new Exception("Player not found"); };
 
-            foreach (var game in player.PlayerGames)
-            {
-                game.Players.Remove(player);
-                await _gameService.UpdateAsync(game, cancellationToken);
-            }
-
-            await _playerService.DeleteAsync(player, cancellationToken);
+            await _playerService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

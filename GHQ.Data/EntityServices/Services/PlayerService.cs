@@ -1,4 +1,5 @@
-﻿using GHQ.Data.Context;
+﻿using System.Security.Cryptography.X509Certificates;
+using GHQ.Data.Context;
 using GHQ.Data.Context.Interfaces;
 using GHQ.Data.Entities;
 using GHQ.Data.EntityServices.Interfaces;
@@ -17,5 +18,33 @@ public class PlayerService : BaseService<Player>, IPlayerService
     public virtual async Task<Player> GetPlayerByIdIncludingGamesAndCharacters(int id, CancellationToken cancellationToken)
     {
         return await _context.Players.Where(x => x.Id == id).Include(x => x.DmGames).Include(x => x.PlayerGames).Include(x => x.Characters).FirstAsync(cancellationToken);
+    }
+    public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken){
+        Player player = await GetPlayerByIdIncludingGamesAndCharacters(id, cancellationToken);
+
+        foreach(var character in player.Characters){
+            _context.Characters.Remove(character);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        foreach(var game in player.PlayerGames){
+            var g = await _context.Games.Where(x => x.Id == game.Id).Include(x=>x.Players).FirstAsync(cancellationToken);
+            g.Players.Remove(player);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        foreach(var game in player.DmGames){
+            var g = await _context.Games.Where(x => x.Id == game.Id).Include(x=>x.Players).Include(x=>x.Characters).FirstAsync(cancellationToken);
+            foreach(var character in g.Characters){
+                _context.Characters.Remove(character);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            g.Players = [];
+            _context.Games.Remove(g);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        _context.Players.Remove(player);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
