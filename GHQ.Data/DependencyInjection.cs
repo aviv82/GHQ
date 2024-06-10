@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IGameService, GameService>();
         services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<ICharacterService, CharacterService>();
+        services.AddScoped<IRollService, RollService>();
 
         return services;
     }

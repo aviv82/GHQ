@@ -5,6 +5,8 @@ using GHQ.Core.GameLogic.Handlers;
 using GHQ.Core.GameLogic.Handlers.Interfaces;
 using GHQ.Core.PlayerLogic.Handlers;
 using GHQ.Core.PlayerLogic.Handlers.Interfaces;
+using GHQ.Core.RollLogic.Handlers;
+using GHQ.Core.RollLogic.Handlers.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GHQ.Core;
@@ -19,6 +21,7 @@ public static class DependencyInjection
              .AddScoped<IPlayerHandler, PlayerHandler>()
              .AddScoped<IGameHandler, GameHandler>()
              .AddScoped<ICharacterHandler, CharacterHandler>()
+             .AddScoped<IRollHandler, RollHandler>()
              .AddValidatorsFromAssembly(applicationAssembly);
 
         return services;
