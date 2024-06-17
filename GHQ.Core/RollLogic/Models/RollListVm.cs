@@ -17,6 +17,7 @@ public class RollListVm : PaginationMetaData
         public int Id { get; set; }
         public string Title { get; set; } = default!;
         public string? Description { get; set; }
+        public int? Difficulty { get; set; }
         public string? Result { get; set; }
         public int GameId { get; set; }
         public GameDto Game { get; set; } = new GameDto();
@@ -34,11 +35,13 @@ public class RollListVm : PaginationMetaData
                 , ops => ops.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description
                 , ops => ops.MapFrom(src => src.Description))
+            .ForMember(dest => dest.Difficulty
+                , ops => ops.MapFrom(src => src.Difficulty))
             .ForMember(dest => dest.GameId
                 , ops => ops.MapFrom(src => src.GameId))
             .ForMember(dest => dest.Game
                 , ops => ops.MapFrom(src => MapGame(src.Game)))
-              .ForMember(dest => dest.CharacterId
+            .ForMember(dest => dest.CharacterId
                 , ops => ops.MapFrom(src => src.CharacterId))
             .ForMember(dest => dest.Character
                 , ops => ops.MapFrom(src => MapCharacter(src.Character)));
