@@ -9,6 +9,6 @@ public class Character : BaseEntity
     public int PlayerId { get; set; }
     public Player Player { get; set; } = default!;
 
-    public ICollection<TraitGroup> TraitGroups { get; set; } = default!;
-    public ICollection<Roll> Rolls { get; set; } = default!;
+    public ICollection<TraitGroup> TraitGroups { get; set; } = [];
+    public ICollection<Roll> Rolls { get; set; } = [];
 }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using GHQ.Common;
+using GHQ.Core.DiceLogic.Models;
 using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
@@ -10,7 +11,7 @@ namespace GHQ.Core.RollLogic.Models;
 
 public class RollListVm : PaginationMetaData
 {
-    public IEnumerable<RollDto> RollList { get; set; } = default!;
+    public ICollection<RollDto> RollList { get; set; } = default!;
 
     public class RollDto : IMapFrom<Roll>
     {
@@ -18,13 +19,11 @@ public class RollListVm : PaginationMetaData
         public string Title { get; set; } = default!;
         public string? Description { get; set; }
         public int? Difficulty { get; set; }
-        public string? Result { get; set; }
         public int GameId { get; set; }
         public GameDto Game { get; set; } = new GameDto();
         public int CharacterId { get; set; }
         public CharacterDto Character { get; set; } = new CharacterDto();
-
-        // public List<DiceDto> DicePool {get; set;} =[];
+        public List<DiceDto> DicePool { get; set; } = [];
 
         public void Mapping(Profile profile)
         {
@@ -44,7 +43,29 @@ public class RollListVm : PaginationMetaData
             .ForMember(dest => dest.CharacterId
                 , ops => ops.MapFrom(src => src.CharacterId))
             .ForMember(dest => dest.Character
-                , ops => ops.MapFrom(src => MapCharacter(src.Character)));
+                , ops => ops.MapFrom(src => MapCharacter(src.Character)))
+            .ForMember(dset => dset.DicePool
+                , ops => ops.MapFrom(src => MapDiceList(src.DicePool)));
+        }
+
+        public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
+        {
+            List<DiceDto> diceListToReturn = [];
+
+            if (diceList != null)
+            {
+                foreach (var dice in diceList)
+                {
+                    diceListToReturn.Add(
+                        new DiceDto
+                        {
+                            Id = dice.Id,
+                            Value = dice.Value,
+                            Result = dice.Result
+                        });
+                }
+            }
+            return diceListToReturn;
         }
 
         public CharacterDto MapCharacter(Character character)

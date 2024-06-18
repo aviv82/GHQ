@@ -4,6 +4,7 @@ using GHQ.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GHQ.Data.Migrations
 {
     [DbContext(typeof(GHQContext))]
-    partial class GHQContextModelSnapshot : ModelSnapshot
+    [Migration("20240618210659_UpdateRoll")]
+    partial class UpdateRoll
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace GHQ.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Result")
+                    b.Property<int?>("Result")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -236,6 +239,10 @@ namespace GHQ.Data.Migrations
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -10,5 +10,5 @@ public class UpdateGameRequest
     public GameType Type { get; set; }
 
     public int DmId { get; set; }
-    public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
+    public List<PlayerDto> Players { get; set; } = [];
 }

@@ -93,9 +93,9 @@ public class CharacterHandler : ICharacterHandler
 
             Character newCharacter = await _characterService.InsertAsync(characterToAdd, cancellationToken);
 
-            List<Character> chracterAsQueryable = new List<Character> { newCharacter };
+            List<Character> characterAsQueryable = new List<Character> { newCharacter };
 
-            return chracterAsQueryable.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider).First();
+            return characterAsQueryable.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider).First();
         }
         catch (Exception ex)
         {

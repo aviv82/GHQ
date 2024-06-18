@@ -14,7 +14,6 @@ public class RollConfiguration : BaseEntityConfiguration<Roll>
         builder.Property(x => x.Title).IsRequired().HasMaxLength(256);
         builder.Property(x => x.Description).HasMaxLength(256);
         builder.Property(x => x.Difficulty);
-        builder.Property(x => x.Result);
 
         builder.HasOne(x => x.Character)
          .WithMany(y => y.Rolls)

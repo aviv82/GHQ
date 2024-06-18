@@ -12,7 +12,7 @@ public class DiceConfiguration : BaseEntityConfiguration<Dice>
     protected override void ConfigureEntity(EntityTypeBuilder<Dice> builder)
     {
         builder.Property(x => x.Value).IsRequired();
-        builder.Property(x => x.Result);
+        builder.Property(x => x.Result).IsRequired();
 
         builder.HasMany(e => e.Rolls)
             .WithMany(e => e.DicePool)

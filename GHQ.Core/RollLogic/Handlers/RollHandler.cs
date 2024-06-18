@@ -18,17 +18,20 @@ public class RollHandler : IRollHandler
     private readonly IRollService _rollService;
     private readonly ICharacterService _characterService;
     private readonly IGameService _gameService;
+    private readonly IDiceService _diceService;
     public RollHandler(
         IMapper mapper,
         IRollService rollService,
         ICharacterService characterService,
-        IGameService gameService
+        IGameService gameService,
+        IDiceService diceService
         )
     {
         _mapper = mapper;
         _rollService = rollService;
         _characterService = characterService;
         _gameService = gameService;
+        _diceService = diceService;
     }
     public async Task<RollListVm> GetAllRolls(
         GetRollListQuery request,
@@ -78,11 +81,11 @@ public class RollHandler : IRollHandler
                 Title = request.Title,
                 Description = request.Description ?? "",
                 Difficulty = request.Difficulty ?? 0,
-                Result = request.Result,
                 GameId = request.GameId,
                 Game = new Game(),
                 CharacterId = request.CharacterId,
                 Character = new Character(),
+                DicePool = []
             };
 
             Character character = await _characterService.GetByIdAsync(request.CharacterId, cancellationToken) ?? new Character();
@@ -90,6 +93,17 @@ public class RollHandler : IRollHandler
 
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             rollToAdd.Game = game;
+
+            foreach (var dice in request.DicePool)
+            {
+                var diceToAdd = await _diceService.GetDiceByValueAsync(dice, cancellationToken);
+                if (diceToAdd != null)
+                {
+                    rollToAdd.DicePool.Add(
+                       diceToAdd
+                    );
+                }
+            }
 
             Roll newRoll = await _rollService.InsertAsync(rollToAdd, cancellationToken);
 
