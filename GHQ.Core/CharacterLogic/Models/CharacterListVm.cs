@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GHQ.Common;
+using GHQ.Common.Enums;
 using GHQ.Core.DiceLogic.Models;
 using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
@@ -89,12 +90,24 @@ public class CharacterListVm : PaginationMetaData
                         Difficulty = roll.Difficulty,
                         GameId = roll.GameId,
                         CharacterId = roll.CharacterId,
-                        DicePool = roll.DicePool.ToList(),
+                        DicePool = MapDicePool(roll.DicePool),
                         Result = roll.Result.ToList()
                     });
                 }
             }
             return rollListToReturn;
+        }
+        public List<DiceType> MapDicePool(ICollection<DiceType> dicePool)
+        {
+            List<DiceType> toReturn = [];
+            if (dicePool != null)
+            {
+                foreach (var dice in dicePool)
+                {
+                    toReturn.Add(dice);
+                }
+            }
+            return toReturn;
         }
         // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
         // {

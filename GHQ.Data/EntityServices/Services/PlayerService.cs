@@ -38,13 +38,29 @@ public class PlayerService : BaseService<Player>, IPlayerService
 
         foreach (var game in player.DmGames)
         {
-            var g = await _context.Games.Where(x => x.Id == game.Id).Include(x => x.Players).Include(x => x.Characters).FirstAsync(cancellationToken);
+            var g = await _context.Games
+            .Where(x => x.Id == game.Id)
+            .Include(x => x.Dm)
+            .Include(x => x.Players)
+            .Include(x => x.Characters)
+            .Include(x => x.Rolls)
+            .FirstAsync(cancellationToken);
+
+            foreach (var roll in g.Rolls)
+            {
+                _context.Rolls.Remove(roll);
+                // await _context.SaveChangesAsync(cancellationToken);
+            }
+
             foreach (var character in g.Characters)
             {
                 _context.Characters.Remove(character);
-                await _context.SaveChangesAsync(cancellationToken);
+                // await _context.SaveChangesAsync(cancellationToken);
             }
+
             g.Players = [];
+            // g.Dm.DmGames.Remove(g);
+
             _context.Games.Remove(g);
             await _context.SaveChangesAsync(cancellationToken);
         }

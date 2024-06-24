@@ -41,6 +41,7 @@ public class GameService : BaseService<Game>, IGameService
         }
 
         game.Players = [];
+        game.Dm.DmGames.Remove(game);
 
         _context.Games.Remove(game);
         await _context.SaveChangesAsync(cancellationToken);

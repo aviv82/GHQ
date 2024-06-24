@@ -47,11 +47,23 @@ public class RollListVm : PaginationMetaData
             .ForMember(dest => dest.Character
                 , ops => ops.MapFrom(src => MapCharacter(src.Character)))
             .ForMember(dest => dest.DicePool
-                , ops => ops.MapFrom(src => src.DicePool))
+                , ops => ops.MapFrom(src => MapDicePool(src.DicePool)))
             .ForMember(dest => dest.Result
-                , ops => ops.MapFrom(src => src.Result));
+                , ops => ops.MapFrom(src => src.Result.ToList()));
         }
 
+        public List<DiceType> MapDicePool(ICollection<DiceType> dicePool)
+        {
+            List<DiceType> toReturn = [];
+            if (dicePool != null)
+            {
+                foreach (var dice in dicePool)
+                {
+                    toReturn.Add(dice);
+                }
+            }
+            return toReturn;
+        }
         public CharacterDto MapCharacter(Character character)
         {
             CharacterDto characterToReturn = new CharacterDto();

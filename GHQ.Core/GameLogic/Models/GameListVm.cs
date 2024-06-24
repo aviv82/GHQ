@@ -90,12 +90,25 @@ public class GameListVm : PaginationMetaData
                         Difficulty = roll.Difficulty,
                         GameId = roll.GameId,
                         CharacterId = roll.CharacterId,
-                        DicePool = roll.DicePool.ToList(),
+                        DicePool = MapDicePool(roll.DicePool),
                         Result = roll.Result.ToList()
                     });
                 }
             }
             return rollListToReturn;
+        }
+
+        public List<DiceType> MapDicePool(ICollection<DiceType> dicePool)
+        {
+            List<DiceType> toReturn = [];
+            if (dicePool != null)
+            {
+                foreach (var dice in dicePool)
+                {
+                    toReturn.Add(dice);
+                }
+            }
+            return toReturn;
         }
 
         public List<PlayerDto> MapPlayerList(ICollection<Player> list)
