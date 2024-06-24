@@ -90,30 +90,12 @@ public class GameListVm : PaginationMetaData
                         Difficulty = roll.Difficulty,
                         GameId = roll.GameId,
                         CharacterId = roll.CharacterId,
-                        DicePool = MapDiceList(roll.DicePool)
+                        DicePool = roll.DicePool.ToList(),
+                        Result = roll.Result.ToList()
                     });
                 }
             }
             return rollListToReturn;
-        }
-        public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
-        {
-            List<DiceDto> diceListToReturn = [];
-
-            if (diceList != null)
-            {
-                foreach (var dice in diceList)
-                {
-                    diceListToReturn.Add(
-                        new DiceDto
-                        {
-                            Id = dice.Id,
-                            Value = dice.Value,
-                            Result = dice.Result
-                        });
-                }
-            }
-            return diceListToReturn;
         }
 
         public List<PlayerDto> MapPlayerList(ICollection<Player> list)
@@ -140,6 +122,26 @@ public class GameListVm : PaginationMetaData
             }
             return playerToReturn;
         }
+
+        // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
+        // {
+        //     List<DiceDto> diceListToReturn = [];
+
+        //     if (diceList != null)
+        //     {
+        //         foreach (var dice in diceList)
+        //         {
+        //             diceListToReturn.Add(
+        //                 new DiceDto
+        //                 {
+        //                     Id = dice.Id,
+        //                     Value = dice.Value,
+        //                     Result = dice.Result
+        //                 });
+        //         }
+        //     }
+        //     return diceListToReturn;
+        // }
     }
 }
 

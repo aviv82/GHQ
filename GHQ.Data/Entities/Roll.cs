@@ -1,4 +1,6 @@
-﻿namespace GHQ.Data.Entities;
+﻿using GHQ.Common.Enums;
+
+namespace GHQ.Data.Entities;
 
 public class Roll : BaseEntity
 {
@@ -9,5 +11,6 @@ public class Roll : BaseEntity
     public Character Character { get; set; } = default!;
     public int GameId { get; set; }
     public Game Game { get; set; } = default!;
-    public ICollection<Dice> DicePool { get; set; } = [];
+    public ICollection<DiceType> DicePool { get; set; } = [];
+    public ICollection<int> Result { get; set; } = [];
 }

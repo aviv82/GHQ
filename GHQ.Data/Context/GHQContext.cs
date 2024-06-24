@@ -13,13 +13,14 @@ public class GHQContext : DbContext, IGHQContext
     public virtual DbSet<Game> Games { get; set; }
     public virtual DbSet<Character> Characters { get; set; }
     public virtual DbSet<Player> Players { get; set; }
-    public virtual DbSet<Dice> Dices { get; set; }
+
+    // public virtual DbSet<Dice> Dices { get; set; }
     public virtual DbSet<Roll> Rolls { get; set; }
     public virtual DbSet<TraitGroup> TraitGroups { get; set; }
     public virtual DbSet<Trait> Traits { get; set; }
 
     public DbSet<PlayerGame> PlayerGames { get; set; }
-    public DbSet<DiceRoll> DiceRolls { get; set; }
+    // public DbSet<DiceRoll> DiceRolls { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,12 +33,12 @@ public class GHQContext : DbContext, IGHQContext
         modelBuilder.Entity<PlayerGame>()
             .HasIndex(e => new { e.PlayerId, e.GameId }).IsUnique();
 
-        modelBuilder.Entity<DiceRoll>()
-        .HasIndex(e => e.DiceId);
-        modelBuilder.Entity<DiceRoll>()
-            .HasIndex(e => e.RollId);
-        modelBuilder.Entity<DiceRoll>()
-            .HasIndex(e => new { e.DiceId, e.RollId }).IsUnique();
+        // modelBuilder.Entity<DiceRoll>()
+        // .HasIndex(e => e.DiceId);
+        // modelBuilder.Entity<DiceRoll>()
+        //     .HasIndex(e => e.RollId);
+        // modelBuilder.Entity<DiceRoll>()
+        //     .HasIndex(e => new { e.DiceId, e.RollId }).IsUnique();
 
         RemoveCascadeDeleteBehaviors(modelBuilder);
     }

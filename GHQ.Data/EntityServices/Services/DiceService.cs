@@ -12,8 +12,8 @@ public class DiceService : BaseService<Dice>, IDiceService
         _context = context;
     }
 
-    public async Task<Dice?> GetDiceByValueAsync(int diceValue, CancellationToken cancellationToken)
-    {
-        return await _context.Dices.Where(x => x.Value == diceValue).FirstOrDefaultAsync(cancellationToken);
-    }
+    // public async Task<Dice?> GetDiceByValueAsync(int diceValue, CancellationToken cancellationToken)
+    // {
+    // return await _context.Dices.Where(x => x.Value == diceValue).FirstOrDefaultAsync(cancellationToken);
+    // }
 }

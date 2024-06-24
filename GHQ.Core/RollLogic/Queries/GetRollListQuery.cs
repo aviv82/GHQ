@@ -1,4 +1,3 @@
-
 using System.ComponentModel;
 using GHQ.Common;
 using GHQ.Common.Interfaces;
@@ -43,6 +42,8 @@ public class GetRollListQuery : QueryBase, IQueryWithSorting, IQueryWithPaginati
                                 => NameOf<Roll>.Full(m => m.Character),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.DicePool))
                                 => NameOf<Roll>.Full(m => m.DicePool),
+                        { } s when NameEquals(s, nameof(RollListVm.RollDto.Result))
+                                => NameOf<Roll>.Full(m => m.Result),
                         { } s when typeof(Roll).GetProperties().Any(x => NameEquals(x.Name, name))
                                 => name,
                         _ => string.Empty

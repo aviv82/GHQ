@@ -1,5 +1,6 @@
 using AutoMapper;
 using GHQ.Common;
+using GHQ.Common.Enums;
 using GHQ.Core.DiceLogic.Models;
 using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
@@ -23,7 +24,8 @@ public class RollListVm : PaginationMetaData
         public GameDto Game { get; set; } = new GameDto();
         public int CharacterId { get; set; }
         public CharacterDto Character { get; set; } = new CharacterDto();
-        public List<DiceDto> DicePool { get; set; } = [];
+        public List<DiceType> DicePool { get; set; } = [];
+        public List<int> Result { get; set; } = [];
 
         public void Mapping(Profile profile)
         {
@@ -44,28 +46,10 @@ public class RollListVm : PaginationMetaData
                 , ops => ops.MapFrom(src => src.CharacterId))
             .ForMember(dest => dest.Character
                 , ops => ops.MapFrom(src => MapCharacter(src.Character)))
-            .ForMember(dset => dset.DicePool
-                , ops => ops.MapFrom(src => MapDiceList(src.DicePool)));
-        }
-
-        public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
-        {
-            List<DiceDto> diceListToReturn = [];
-
-            if (diceList != null)
-            {
-                foreach (var dice in diceList)
-                {
-                    diceListToReturn.Add(
-                        new DiceDto
-                        {
-                            Id = dice.Id,
-                            Value = dice.Value,
-                            Result = dice.Result
-                        });
-                }
-            }
-            return diceListToReturn;
+            .ForMember(dest => dest.DicePool
+                , ops => ops.MapFrom(src => src.DicePool))
+            .ForMember(dest => dest.Result
+                , ops => ops.MapFrom(src => src.Result));
         }
 
         public CharacterDto MapCharacter(Character character)
@@ -111,5 +95,25 @@ public class RollListVm : PaginationMetaData
             }
             return playerToReturn;
         }
+
+        // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
+        // {
+        //     List<DiceDto> diceListToReturn = [];
+
+        //     if (diceList != null)
+        //     {
+        //         foreach (var dice in diceList)
+        //         {
+        //             diceListToReturn.Add(
+        //                 new DiceDto
+        //                 {
+        //                     Id = dice.Id,
+        //                     Value = dice.Value,
+        //                     Result = dice.Result
+        //                 });
+        //         }
+        //     }
+        //     return diceListToReturn;
+        // }
     }
 }

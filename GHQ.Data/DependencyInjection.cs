@@ -20,7 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<IRollService, RollService>();
-        services.AddScoped<IDiceService, DiceService>();
+        // services.AddScoped<IDiceService, DiceService>();
 
         return services;
     }

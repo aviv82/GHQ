@@ -14,6 +14,8 @@ public class RollConfiguration : BaseEntityConfiguration<Roll>
         builder.Property(x => x.Title).IsRequired().HasMaxLength(256);
         builder.Property(x => x.Description).HasMaxLength(256);
         builder.Property(x => x.Difficulty);
+        builder.Property(x => x.DicePool);
+        builder.Property(x => x.Result);
 
         builder.HasOne(x => x.Character)
          .WithMany(y => y.Rolls)
@@ -25,8 +27,8 @@ public class RollConfiguration : BaseEntityConfiguration<Roll>
          .HasForeignKey(z => z.GameId)
          .IsRequired(true);
 
-        builder.HasMany(e => e.DicePool)
-            .WithMany(e => e.Rolls)
-            .UsingEntity<DiceRoll>();
+        // builder.HasMany(e => e.DicePool)
+        //     .WithMany(e => e.Rolls)
+        //     .UsingEntity<DiceRoll>();
     }
 }

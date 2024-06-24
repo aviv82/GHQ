@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using GHQ.Common.Helpers;
 using GHQ.Core.Extensions;
 using GHQ.Core.RollLogic.Handlers.Interfaces;
 using GHQ.Core.RollLogic.Models;
@@ -18,20 +19,20 @@ public class RollHandler : IRollHandler
     private readonly IRollService _rollService;
     private readonly ICharacterService _characterService;
     private readonly IGameService _gameService;
-    private readonly IDiceService _diceService;
+    // private readonly IDiceService _diceService;
     public RollHandler(
         IMapper mapper,
         IRollService rollService,
         ICharacterService characterService,
-        IGameService gameService,
-        IDiceService diceService
+        IGameService gameService
+        // IDiceService diceService
         )
     {
         _mapper = mapper;
         _rollService = rollService;
         _characterService = characterService;
         _gameService = gameService;
-        _diceService = diceService;
+        // _diceService = diceService;
     }
     public async Task<RollListVm> GetAllRolls(
         GetRollListQuery request,
@@ -85,7 +86,8 @@ public class RollHandler : IRollHandler
                 Game = new Game(),
                 CharacterId = request.CharacterId,
                 Character = new Character(),
-                DicePool = []
+                DicePool = request.DicePool ?? [],
+                Result = []
             };
 
             Character character = await _characterService.GetByIdAsync(request.CharacterId, cancellationToken) ?? new Character();
@@ -94,16 +96,18 @@ public class RollHandler : IRollHandler
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             rollToAdd.Game = game;
 
-            foreach (var dice in request.DicePool)
-            {
-                var diceToAdd = await _diceService.GetDiceByValueAsync(dice, cancellationToken);
-                if (diceToAdd != null)
-                {
-                    rollToAdd.DicePool.Add(
-                       diceToAdd
-                    );
-                }
-            }
+            rollToAdd.Result = DiceRollerExtensions.DicePoolRoller(rollToAdd.DicePool);
+
+            // foreach (var dice in request.DicePool)
+            // {
+            //     var diceToAdd = await _diceService.GetDiceByValueAsync(dice, cancellationToken);
+            //     if (diceToAdd != null)
+            //     {
+            //         rollToAdd.DicePool.Add(
+            //            diceToAdd
+            //         );
+            //     }
+            // }
 
             Roll newRoll = await _rollService.InsertAsync(rollToAdd, cancellationToken);
 
@@ -124,7 +128,7 @@ public class RollHandler : IRollHandler
         {
             var roll = await _rollService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (roll == null) { throw new Exception("Game not found"); };
+            if (roll == null) { throw new Exception("Roll not found"); };
 
             await _rollService.DeleteAsync(roll, cancellationToken);
         }

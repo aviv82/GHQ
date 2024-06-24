@@ -66,57 +66,6 @@ namespace GHQ.Data.Migrations
                     b.ToTable("Characters", "dbo");
                 });
 
-            modelBuilder.Entity("GHQ.Data.Entities.Dice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Result")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dices", "dbo");
-                });
-
-            modelBuilder.Entity("GHQ.Data.Entities.DiceRoll", b =>
-                {
-                    b.Property<int>("DiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RollId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DiceId", "RollId");
-
-                    b.HasIndex("DiceId");
-
-                    b.HasIndex("RollId");
-
-                    b.HasIndex("DiceId", "RollId")
-                        .IsUnique();
-
-                    b.ToTable("DiceRolls", "dbo");
-                });
-
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -231,11 +180,19 @@ namespace GHQ.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("DicePool")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Difficulty")
                         .HasColumnType("int");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -356,25 +313,6 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Game");
 
                     b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("GHQ.Data.Entities.DiceRoll", b =>
-                {
-                    b.HasOne("GHQ.Data.Entities.Dice", "Dice")
-                        .WithMany()
-                        .HasForeignKey("DiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GHQ.Data.Entities.Roll", "Roll")
-                        .WithMany()
-                        .HasForeignKey("RollId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Dice");
-
-                    b.Navigation("Roll");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>
