@@ -9,6 +9,8 @@ public class GetRollByIdValidator : AbstractValidator<GetRollByIdQuery>
 {
     public GetRollByIdValidator(IGHQContext context)
     {
-        RuleFor(x => x.Id).ValidateExistence<GetRollByIdQuery, Roll>(context);
+        RuleFor(x => x.Id)
+        .ValidateExistence<GetRollByIdQuery, Roll>(context)
+        .WithMessage("Roll not found");
     }
 }

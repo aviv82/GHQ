@@ -11,7 +11,9 @@ public class GetCharacterByIdValidator : AbstractValidator<GetCharacterByIdQuery
     public GetCharacterByIdValidator(IGHQContext context)
     {
 
-        RuleFor(x => x.Id).ValidateExistence<GetCharacterByIdQuery, Character>(context);
+        RuleFor(x => x.Id)
+        .ValidateExistence<GetCharacterByIdQuery, Character>(context)
+        .WithMessage("Character not found");
 
     }
 }

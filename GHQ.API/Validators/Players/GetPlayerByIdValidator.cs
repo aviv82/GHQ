@@ -10,7 +10,9 @@ public class GetPlayerByIdValidator : AbstractValidator<GetPlayerByIdQuery>
 {
     public GetPlayerByIdValidator(IGHQContext context)
     {
-        RuleFor(x => x.Id).ValidateExistence<GetPlayerByIdQuery, Player>(context);
+        RuleFor(x => x.Id)
+        .ValidateExistence<GetPlayerByIdQuery, Player>(context)
+        .WithMessage("Player not found");
     }
 
 }
