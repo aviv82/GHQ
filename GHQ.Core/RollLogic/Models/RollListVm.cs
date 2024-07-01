@@ -1,7 +1,6 @@
 using AutoMapper;
 using GHQ.Common;
 using GHQ.Common.Enums;
-using GHQ.Core.DiceLogic.Models;
 using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
@@ -64,6 +63,7 @@ public class RollListVm : PaginationMetaData
             }
             return toReturn;
         }
+
         public CharacterDto MapCharacter(Character character)
         {
             CharacterDto characterToReturn = new CharacterDto();

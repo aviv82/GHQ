@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using GHQ.Common.Enums;
 using GHQ.Common.Helpers;
 using GHQ.Core.Extensions;
 using GHQ.Core.RollLogic.Handlers.Interfaces;
@@ -86,7 +87,7 @@ public class RollHandler : IRollHandler
                 Game = new Game(),
                 CharacterId = request.CharacterId,
                 Character = new Character(),
-                DicePool = request.DicePool ?? [],
+                DicePool = [],
                 Result = []
             };
 
@@ -95,6 +96,18 @@ public class RollHandler : IRollHandler
 
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             rollToAdd.Game = game;
+
+            ICollection<DiceType> dicePoolToAdd = [];
+
+            if (request.DicePool != null)
+            {
+                foreach (var dice in request.DicePool)
+                {
+                    dicePoolToAdd.Add(dice);
+                }
+            }
+
+            rollToAdd.DicePool = dicePoolToAdd;
 
             rollToAdd.Result = DiceRollerExtensions.DicePoolRoller(rollToAdd.DicePool);
 

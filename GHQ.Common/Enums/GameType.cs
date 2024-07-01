@@ -3,4 +3,5 @@
 public enum GameType
 {
     Cortex,
+    WorldOfDarkness
 }

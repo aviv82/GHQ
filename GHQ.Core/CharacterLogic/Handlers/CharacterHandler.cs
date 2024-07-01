@@ -51,7 +51,6 @@ public class CharacterHandler : ICharacterHandler
         };
     }
 
-
     public async Task<CharacterDto> GetCharacterById(
        GetCharacterByIdQuery request,
        CancellationToken cancellationToken)
