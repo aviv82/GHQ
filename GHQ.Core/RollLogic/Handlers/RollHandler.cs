@@ -97,7 +97,7 @@ public class RollHandler : IRollHandler
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             rollToAdd.Game = game;
 
-            ICollection<DiceType> dicePoolToAdd = [];
+            List<DiceType> dicePoolToAdd = [];
 
             if (request.DicePool != null)
             {

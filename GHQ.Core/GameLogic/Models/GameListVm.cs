@@ -98,7 +98,7 @@ public class GameListVm : PaginationMetaData
             return rollListToReturn;
         }
 
-        public List<DiceType> MapDicePool(ICollection<DiceType> dicePool)
+        public List<DiceType> MapDicePool(List<DiceType> dicePool)
         {
             List<DiceType> toReturn = [];
             if (dicePool != null)

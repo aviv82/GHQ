@@ -11,6 +11,6 @@ public class Roll : BaseEntity
     public Character Character { get; set; } = default!;
     public int GameId { get; set; }
     public Game Game { get; set; } = default!;
-    public ICollection<DiceType> DicePool { get; set; } = [];
-    public ICollection<int> Result { get; set; } = [];
+    public List<DiceType> DicePool { get; set; } = [];
+    public List<int> Result { get; set; } = [];
 }

@@ -4,9 +4,9 @@ namespace GHQ.Common.Helpers;
 
 public static class DiceRollerExtensions
 {
-    public static ICollection<int> DicePoolRoller(ICollection<DiceType> dicePool)
+    public static List<int> DicePoolRoller(List<DiceType> dicePool)
     {
-        ICollection<int> results = [];
+        List<int> results = [];
 
         foreach (var dice in dicePool)
         {
@@ -15,9 +15,9 @@ public static class DiceRollerExtensions
 
         return results;
     }
-    public static ICollection<int> DicePoolRoller(ICollection<int> dicePool)
+    public static List<int> DicePoolRoller(List<int> dicePool)
     {
-        ICollection<int> results = [];
+        List<int> results = [];
 
         foreach (var dice in dicePool)
         {
