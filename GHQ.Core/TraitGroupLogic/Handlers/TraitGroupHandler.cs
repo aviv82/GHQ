@@ -1,0 +1,107 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using GHQ.Core.TraitGroupLogic.Handlers.Interfaces;
+using GHQ.Core.TraitGroupLogic.Models;
+using GHQ.Core.TraitGroupLogic.Queries;
+using GHQ.Core.TraitGroupLogic.Requests;
+using GHQ.Data.Entities;
+using GHQ.Data.EntityServices.Interfaces;
+
+namespace GHQ.Core.TraitGroupLogic.Handlers;
+public class TraitGroupHandler : ITraitGroupHandler
+{
+    private readonly ITraitGroupService _traitGroupService;
+    private readonly IMapper _mapper;
+
+    public TraitGroupHandler(
+        ITraitGroupService traitGroupService,
+        IMapper mapper
+        )
+    {
+        _traitGroupService = traitGroupService;
+        _mapper = mapper;
+    }
+
+    public async Task<TraitGroupDto> GetTraitGroupById(
+    GetTraitGroupByIdQuery request,
+    CancellationToken cancellationToken)
+    {
+        TraitGroup? query = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
+
+        if (query == null) { throw new Exception("Trait Group not found"); }
+
+        List<TraitGroup> traitGroupList = new List<TraitGroup> { query };
+
+        var toReturn = traitGroupList.AsQueryable().ProjectTo<TraitGroupDto>(_mapper.ConfigurationProvider);
+
+        return toReturn.First();
+    }
+
+    public async Task<TraitGroupDto> AddTraitGroup(
+    AddTraitGroupRequest request,
+    CancellationToken cancellationToken)
+    {
+        try
+        {
+            TraitGroup traitGroupToAdd = new TraitGroup
+            {
+                TraitGroupName = request.TraitGroupName,
+                Type = request.Type ?? null,
+                CharacterId = request.CharacterId
+            };
+
+            TraitGroup newCharacter = await _traitGroupService.InsertAsync(traitGroupToAdd, cancellationToken);
+
+            List<TraitGroup> traitGroupAsQueryable = new List<TraitGroup> { newCharacter };
+
+            return traitGroupAsQueryable.AsQueryable().ProjectTo<TraitGroupDto>(_mapper.ConfigurationProvider).First();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<TraitGroupDto> UpdateTraitGroup(
+     UpdateTraitGroupRequest request,
+     CancellationToken cancellationToken)
+    {
+        try
+        {
+            var traitGroup = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
+
+            if (traitGroup == null) { throw new Exception("Trait Group not found"); };
+
+            traitGroup.TraitGroupName = request.TraitGroupName;
+            if (request.Type != null)
+            {
+                traitGroup.Type = request.Type;
+            }
+
+            await _traitGroupService.UpdateAsync(traitGroup, cancellationToken);
+            return _mapper.Map<TraitGroupDto>(traitGroup);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task DeleteTraitGroup(
+    DeleteTraitGroupRequest request,
+    CancellationToken cancellationToken)
+    {
+        try
+        {
+            var traitGroup = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
+
+            if (traitGroup == null) { throw new Exception("Character not found"); };
+
+            await _traitGroupService.DeleteAsync(traitGroup, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+}

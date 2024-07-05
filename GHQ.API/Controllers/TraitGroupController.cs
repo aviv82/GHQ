@@ -1,86 +1,62 @@
 using FluentValidation;
 using GHQ.Common.Exceptions;
-using GHQ.Core.RollLogic.Handlers.Interfaces;
-using GHQ.Core.RollLogic.Models;
-using GHQ.Core.RollLogic.Queries;
-using GHQ.Core.RollLogic.Requests;
+using GHQ.Core.TraitGroupLogic.Handlers.Interfaces;
+using GHQ.Core.TraitGroupLogic.Models;
+using GHQ.Core.TraitGroupLogic.Queries;
+using GHQ.Core.TraitGroupLogic.Requests;
 using Microsoft.AspNetCore.Mvc;
-using static GHQ.Core.RollLogic.Models.RollListVm;
 
 namespace GHQ.API.Controllers;
 
 [Route("api/[controller]s")]
 [ApiController]
-public class RollController : Controller
+public class TraitGroupController : Controller
 {
-    private readonly IRollHandler _rollHandler;
-    private readonly ILogger<RollController> _logger;
-    private readonly IValidator<AddRollRequest> _addValidator;
-    private readonly IValidator<GetRollByIdQuery> _rollByIdValidator;
-    private readonly IValidator<DeleteRollRequest> _deleteValidator;
+    private readonly ITraitGroupHandler _traitGroupHandler;
+    private readonly ILogger<TraitGroupController> _logger;
+    private readonly IValidator<GetTraitGroupByIdQuery> _traitGroupByIdValidator;
+    private readonly IValidator<AddTraitGroupRequest> _addValidator;
+    private readonly IValidator<UpdateTraitGroupRequest> _updateValidator;
+    private readonly IValidator<DeleteTraitGroupRequest> _deleteValidator;
+
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RollController"/> class.
+    /// Initializes a new instance of the <see cref="TraitGroupController"/> class.
     /// </summary>
-    /// <param name="rollHandler">A Roll object.</param>
+    /// <param name="traitGroupHandler">A Trait Group object.</param>
     /// <param name="logger">A logger object for this controller.</param>
-    /// <param name="rollByIdValidator">An IValidator object for get by id requests.</param>
+    /// <param name="traitGroupByIdValidator">An IValidator object for get by id requests.</param>
     /// <param name="addValidator">An IValidator object for add requests.</param>
+    /// <param name="updateValidator">An IValidator object for update requests.</param>
     /// <param name="deleteValidator">An IValidator object for delete requests.</param>
-    public RollController(
-        IRollHandler rollHandler,
-        ILogger<RollController> logger,
-        IValidator<GetRollByIdQuery> rollByIdValidator,
-        IValidator<AddRollRequest> addValidator,
-        IValidator<DeleteRollRequest> deleteValidator
-        )
+    public TraitGroupController(
+        ITraitGroupHandler traitGroupHandler,
+        ILogger<TraitGroupController> logger,
+        IValidator<GetTraitGroupByIdQuery> traitGroupByIdValidator,
+        IValidator<AddTraitGroupRequest> addValidator,
+        IValidator<UpdateTraitGroupRequest> updateValidator,
+        IValidator<DeleteTraitGroupRequest> deleteValidator)
     {
-        _rollHandler = rollHandler;
+        _traitGroupHandler = traitGroupHandler;
         _logger = logger;
-        _rollByIdValidator = rollByIdValidator;
+        _traitGroupByIdValidator = traitGroupByIdValidator;
         _addValidator = addValidator;
+        _updateValidator = updateValidator;
         _deleteValidator = deleteValidator;
     }
 
     /// <summary>
-    ///  Get rolls using optional filtering/sorting options.
-    /// </summary>
-    /// <param name="request">A request object inferred from the query in the URL.</param>
-    /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-    [HttpGet]
-    public async Task<ActionResult<RollListVm>> GetAll(
-        [FromQuery] GetRollListQuery request,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var result = await _rollHandler.GetAllRolls(request, cancellationToken);
-            return Ok(result);
-        }
-        catch (BusinessException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-            return new ObjectResult(e.Message) { StatusCode = 500 };
-        }
-    }
-
-    /// <summary>
-    ///  Get Roll by Id.
+    ///  Get Trait Group by Id.
     /// </summary>
     /// <param name="request">A request object inferred from the query in the URL.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     [HttpGet("{Id}")]
-    public async Task<ActionResult<RollDto>> GetById(
-        [FromRoute] GetRollByIdQuery request,
+    public async Task<ActionResult<TraitGroupDto>> GetById(
+        [FromRoute] GetTraitGroupByIdQuery request,
         CancellationToken cancellationToken = default)
     {
-        var validationResult = await _rollByIdValidator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _traitGroupByIdValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             return BadRequest(validationResult.Errors);
@@ -88,7 +64,7 @@ public class RollController : Controller
 
         try
         {
-            var result = await _rollHandler.GetRollById(request, cancellationToken);
+            var result = await _traitGroupHandler.GetTraitGroupById(request, cancellationToken);
             return Ok(result);
         }
         catch (BusinessException e)
@@ -102,15 +78,16 @@ public class RollController : Controller
         }
     }
 
+
     /// <summary>
-    ///  Add Roll.
+    ///  Add Trait Group.
     /// </summary>
     /// <param name="request">A request object inferred from the body.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     [HttpPost("add")]
-    public async Task<ActionResult<RollDto>> Add(
-        [FromBody] AddRollRequest request,
+    public async Task<ActionResult<TraitGroupDto>> Add(
+        [FromBody] AddTraitGroupRequest request,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _addValidator.ValidateAsync(request, cancellationToken);
@@ -121,7 +98,7 @@ public class RollController : Controller
 
         try
         {
-            var result = await _rollHandler.AddRoll(request, cancellationToken);
+            var result = await _traitGroupHandler.AddTraitGroup(request, cancellationToken);
             return CreatedAtAction("Add", result);
         }
         catch (Exception e)
@@ -132,14 +109,43 @@ public class RollController : Controller
     }
 
     /// <summary>
-    ///  Delete Roll.
+    ///  Update Trait group.
+    /// </summary>
+    /// <param name="request">A request object inferred from the body.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+    [HttpPut("edit")]
+    public async Task<IActionResult> Update(
+       [FromBody] UpdateTraitGroupRequest request,
+       CancellationToken cancellationToken = default)
+    {
+        var validateResult = await _updateValidator.ValidateAsync(request, cancellationToken);
+
+        if (!validateResult.IsValid)
+        {
+            return BadRequest(validateResult.Errors);
+        }
+        try
+        {
+            await _traitGroupHandler.UpdateTraitGroup(request, cancellationToken);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return new ObjectResult(e.Message);
+        }
+    }
+
+    /// <summary>
+    ///  Delete Trait Group.
     /// </summary>
     /// <param name="request">A request object inferred from the query.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(
-        [FromQuery] DeleteRollRequest request,
+        [FromQuery] DeleteTraitGroupRequest request,
         CancellationToken cancellationToken = default)
     {
         var validateResult = await _deleteValidator.ValidateAsync(request, cancellationToken);
@@ -150,7 +156,7 @@ public class RollController : Controller
         }
         try
         {
-            await _rollHandler.DeleteRoll(request, cancellationToken);
+            await _traitGroupHandler.DeleteTraitGroup(request, cancellationToken);
             return NoContent();
         }
         catch (Exception e)

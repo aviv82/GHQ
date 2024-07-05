@@ -17,7 +17,7 @@ namespace GHQ.API.Controllers;
 public class CharacterController : Controller
 {
     private readonly ICharacterHandler _characterHandler;
-    private readonly ILogger<GameController> _logger;
+    private readonly ILogger<CharacterController> _logger;
     IValidator<GetCharacterByIdQuery> _characterByIdValidator;
     IValidator<AddCharacterRequest> _addValidator;
     IValidator<UpdateCharacterRequest> _updateValidator;
@@ -34,7 +34,7 @@ public class CharacterController : Controller
     /// <param name="deleteValidator">An IValidator object for delete requests.</param>
     public CharacterController(
         ICharacterHandler characterHandler,
-        ILogger<GameController> logger,
+        ILogger<CharacterController> logger,
         IValidator<GetCharacterByIdQuery> characterByIdValidator,
         IValidator<AddCharacterRequest> addValidator,
         IValidator<UpdateCharacterRequest> updateValidator,
