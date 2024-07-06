@@ -38,8 +38,8 @@ public class GetCharacterListQuery : QueryBase, IQueryWithSorting, IQueryWithPag
                                 => NameOf<Character>.Full(m => m.PlayerId),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Player))
                                 => NameOf<Character>.Full(m => m.Player),
-                        { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Rolls))
-                                => NameOf<Character>.Full(m => m.Rolls),
+                        // { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Rolls))
+                        //         => NameOf<Character>.Full(m => m.Rolls),
                         { } s when typeof(Character).GetProperties().Any(x => NameEquals(x.Name, name))
                                 => name,
                         _ => string.Empty
