@@ -9,6 +9,8 @@ using GHQ.Core.RollLogic.Handlers;
 using GHQ.Core.RollLogic.Handlers.Interfaces;
 using GHQ.Core.TraitGroupLogic.Handlers;
 using GHQ.Core.TraitGroupLogic.Handlers.Interfaces;
+using GHQ.Core.TraitLogic.Handlers;
+using GHQ.Core.TraitLogic.Handlers.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GHQ.Core;
@@ -25,6 +27,7 @@ public static class DependencyInjection
              .AddScoped<ICharacterHandler, CharacterHandler>()
              .AddScoped<IRollHandler, RollHandler>()
              .AddScoped<ITraitGroupHandler, TraitGroupHandler>()
+             .AddScoped<ITraitHandler, TraitHandler>()
              .AddValidatorsFromAssembly(applicationAssembly);
 
         return services;

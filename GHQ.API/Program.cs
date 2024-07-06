@@ -20,7 +20,6 @@ if (builder.Environment.IsDevelopment())
 
 connection = builder.Configuration.GetConnectionString(Constants.ConnectionStrings.GHQDataBaseConnectionString);
 
-
 AddGHQDataAccess(builder.Services, connection ?? "");
 RegisterApplicationDependencies(builder.Services);
 // Add services to the container.

@@ -50,9 +50,9 @@ public class TraitGroupHandler : ITraitGroupHandler
                 CharacterId = request.CharacterId
             };
 
-            TraitGroup newCharacter = await _traitGroupService.InsertAsync(traitGroupToAdd, cancellationToken);
+            TraitGroup newTraitGroup = await _traitGroupService.InsertAsync(traitGroupToAdd, cancellationToken);
 
-            List<TraitGroup> traitGroupAsQueryable = new List<TraitGroup> { newCharacter };
+            List<TraitGroup> traitGroupAsQueryable = new List<TraitGroup> { newTraitGroup };
 
             return traitGroupAsQueryable.AsQueryable().ProjectTo<TraitGroupDto>(_mapper.ConfigurationProvider).First();
         }
@@ -95,7 +95,7 @@ public class TraitGroupHandler : ITraitGroupHandler
         {
             var traitGroup = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (traitGroup == null) { throw new Exception("Character not found"); };
+            if (traitGroup == null) { throw new Exception("Trait Group not found"); };
 
             await _traitGroupService.DeleteAsync(traitGroup, cancellationToken);
         }
