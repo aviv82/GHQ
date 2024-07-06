@@ -7,6 +7,7 @@ public class TraitDto : IMapFrom<Trait>
 {
     public int Id { get; set; }
     public string Name { get; set; } = default!;
+    public string? Details { get; set; }
     public int? Value { get; set; }
     public int? Level { get; set; }
     public int TraitGroupId { get; set; }
@@ -19,6 +20,8 @@ public class TraitDto : IMapFrom<Trait>
             , ops => ops.MapFrom(src => src.Id))
         .ForMember(dest => dest.Name
             , ops => ops.MapFrom(src => src.Name))
+        .ForMember(dest => dest.Details
+            , ops => ops.MapFrom(src => src.Details))
         .ForMember(dest => dest.Value
             , ops => ops.MapFrom(src => src.Value))
         .ForMember(dest => dest.Level

@@ -12,6 +12,7 @@ public class TraitConfiguration : BaseEntityConfiguration<Trait>
     protected override void ConfigureEntity(EntityTypeBuilder<Trait> builder)
     {
         builder.Property(x => x.Name).IsRequired().HasMaxLength(256);
+        builder.Property(x => x.Details).HasMaxLength(256);
         builder.Property(x => x.Value);
         builder.Property(x => x.Level);
 

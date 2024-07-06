@@ -29,6 +29,7 @@ public class TraitHandler : ITraitHandler
             Trait traitToAdd = new Trait
             {
                 Name = request.Name,
+                Details = request.Details ?? null,
                 Value = request.Value ?? null,
                 Level = request.Level ?? null,
                 TraitGroupId = request.TraitGroupId
@@ -56,6 +57,10 @@ public class TraitHandler : ITraitHandler
             if (trait == null) { throw new Exception("Trait not found"); };
 
             trait.Name = request.Name;
+            if (request.Details != null)
+            {
+                trait.Details = request.Details;
+            }
             if (request.Value != null)
             {
                 trait.Value = request.Value;

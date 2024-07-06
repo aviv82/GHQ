@@ -4,6 +4,7 @@ using GHQ.Core.TraitGroupLogic.Handlers.Interfaces;
 using GHQ.Core.TraitGroupLogic.Models;
 using GHQ.Core.TraitGroupLogic.Queries;
 using GHQ.Core.TraitGroupLogic.Requests;
+using GHQ.Core.TraitLogic.Models;
 using GHQ.Data.Entities;
 using GHQ.Data.EntityServices.Interfaces;
 
@@ -11,14 +12,17 @@ namespace GHQ.Core.TraitGroupLogic.Handlers;
 public class TraitGroupHandler : ITraitGroupHandler
 {
     private readonly ITraitGroupService _traitGroupService;
+    // private readonly ITraitService _traitService;
     private readonly IMapper _mapper;
 
     public TraitGroupHandler(
         ITraitGroupService traitGroupService,
+        // ITraitService traitService,
         IMapper mapper
         )
     {
         _traitGroupService = traitGroupService;
+        // _traitService = traitService;
         _mapper = mapper;
     }
 
@@ -77,6 +81,22 @@ public class TraitGroupHandler : ITraitGroupHandler
             {
                 traitGroup.Type = request.Type;
             }
+
+            // if (traitGroup.Traits != request.Traits && request.Traits != null)
+            // {
+            //     traitGroup.Traits = [];
+
+            //     List<Trait> traits = await _traitService.GetAllAsync(cancellationToken);
+
+            //     foreach (TraitDto trait in request.Traits)
+            //     {
+            //         Trait? listTrait = traits.FirstOrDefault(x => x.Id == trait.Id);
+
+            //         if (listTrait == null) { throw new Exception("Trait Group Trait not found"); };
+
+            //         traitGroup.Traits.Add(listTrait);
+            //     }
+            // }
 
             await _traitGroupService.UpdateAsync(traitGroup, cancellationToken);
             return _mapper.Map<TraitGroupDto>(traitGroup);

@@ -108,8 +108,8 @@ public class GameHandler : IGameHandler
 
             if (game == null) { throw new Exception("Game not found"); };
 
-            game.Title = request.Title;
-            game.Type = request.Type;
+            game.Title = request.Title ?? game.Title;
+            game.Type = request.Type ?? game.Type;
 
             if (request.DmId != 0 || game.Players != request.Players)
             {
@@ -123,10 +123,10 @@ public class GameHandler : IGameHandler
                     if (newDm == null) { throw new Exception("Player game DM not found"); };
 
                     game.Dm = newDm;
-                    game.DmId = request.DmId;
+                    game.DmId = request.DmId ?? game.DmId;
                 }
 
-                if (game.Players != request.Players)
+                if (game.Players != request.Players && request.Players != null)
                 {
                     game.Players = [];
 
