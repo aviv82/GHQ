@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GHQ.Data.Migrations
 {
     [DbContext(typeof(GHQContext))]
-    [Migration("20240817201133_Initial")]
+    [Migration("20240817221737_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -147,10 +147,10 @@ namespace GHQ.Data.Migrations
 
             modelBuilder.Entity("GHQ.Data.Entities.PlayerGame", b =>
                 {
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.HasKey("GameId", "PlayerId");
