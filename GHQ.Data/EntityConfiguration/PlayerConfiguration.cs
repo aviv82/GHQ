@@ -1,4 +1,5 @@
 ﻿using GHQ.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GHQ.Data.EntityConfiguration;

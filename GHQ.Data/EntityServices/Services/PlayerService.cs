@@ -10,10 +10,12 @@ public class PlayerService : BaseService<Player>, IPlayerService
 {
     private readonly IGHQContext _context;
     private readonly ICharacterService _characterService;
-    public PlayerService(GHQContext context, ICharacterService characterService) : base(context)
+    private readonly IGameService _gameService;
+    public PlayerService(GHQContext context, ICharacterService characterService, IGameService gameService) : base(context)
     {
         _context = context;
         _characterService = characterService;
+        _gameService = gameService;
     }
 
     public virtual async Task<Player> GetPlayerByIdIncludingGamesAndCharacters(int id, CancellationToken cancellationToken)
@@ -26,16 +28,17 @@ public class PlayerService : BaseService<Player>, IPlayerService
 
         foreach (var character in player.Characters)
         {
-            _context.Characters.Remove(character);
-            await _context.SaveChangesAsync(cancellationToken);
+            // _context.Characters.Remove(character);
+            // await _context.SaveChangesAsync(cancellationToken);
+            await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
         }
 
-        foreach (var game in player.PlayerGames)
-        {
-            var g = await _context.Games.Where(x => x.Id == game.Id).Include(x => x.Players).FirstAsync(cancellationToken);
-            g.Players.Remove(player);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        // foreach (var game in player.PlayerGames)
+        // {
+        // var g = await _context.Games.Where(x => x.Id == game.Id).Include(x => x.Players).FirstAsync(cancellationToken);
+        // g.Players.Remove(player);
+        // await _context.SaveChangesAsync(cancellationToken);
+        // }
 
         foreach (var game in player.DmGames)
         {
@@ -53,18 +56,19 @@ public class PlayerService : BaseService<Player>, IPlayerService
             //     await _context.SaveChangesAsync(cancellationToken);
             // }
 
-            foreach (var character in g.Characters)
-            {
-                // _context.Characters.Remove(character);
-                // await _context.SaveChangesAsync(cancellationToken);
-                await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
-            }
+            // foreach (var character in g.Characters)
+            // {
+            // _context.Characters.Remove(character);
+            // await _context.SaveChangesAsync(cancellationToken);
+            // await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
+            // }
 
-            g.Players = [];
+            // g.Players = [];
             // g.Dm.DmGames.Remove(g);
 
-            _context.Games.Remove(g);
-            await _context.SaveChangesAsync(cancellationToken);
+            // _context.Games.Remove(g);
+            // await _context.SaveChangesAsync(cancellationToken);
+            await _gameService.DeleteCascadeAsync(g.Id, cancellationToken);
         }
 
         _context.Players.Remove(player);
