@@ -128,7 +128,7 @@ namespace GHQ.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Difficulty = table.Column<int>(type: "int", nullable: true),
-                    CharacterId = table.Column<int>(type: "int", nullable: false),
+                    CharacterId = table.Column<int>(type: "int", nullable: true),
                     GameId = table.Column<int>(type: "int", nullable: false),
                     DicePool = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -144,8 +144,7 @@ namespace GHQ.Data.Migrations
                         column: x => x.CharacterId,
                         principalSchema: "dbo",
                         principalTable: "Characters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Rolls_Games_GameId",
                         column: x => x.GameId,
@@ -164,7 +163,7 @@ namespace GHQ.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TraitGroupName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: true),
-                    CharacterId = table.Column<int>(type: "int", nullable: false),
+                    CharacterId = table.Column<int>(type: "int", nullable: true),
                     Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -177,8 +176,7 @@ namespace GHQ.Data.Migrations
                         column: x => x.CharacterId,
                         principalSchema: "dbo",
                         principalTable: "Characters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -192,7 +190,7 @@ namespace GHQ.Data.Migrations
                     Details = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Value = table.Column<int>(type: "int", nullable: true),
                     Level = table.Column<int>(type: "int", nullable: true),
-                    TraitGroupId = table.Column<int>(type: "int", nullable: false),
+                    TraitGroupId = table.Column<int>(type: "int", nullable: true),
                     Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -205,8 +203,7 @@ namespace GHQ.Data.Migrations
                         column: x => x.TraitGroupId,
                         principalSchema: "dbo",
                         principalTable: "TraitGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

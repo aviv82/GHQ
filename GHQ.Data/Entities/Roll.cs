@@ -8,7 +8,7 @@ public class Roll : BaseEntity
     public string? Description { get; set; }
     public int? Difficulty { get; set; }
     public int? CharacterId { get; set; }
-    public Character? Character { get; set; } = default!;
+    public Character? Character { get; set; }
     public int GameId { get; set; }
     public Game Game { get; set; } = default!;
     public List<DiceType> DicePool { get; set; } = [];

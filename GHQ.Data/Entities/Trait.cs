@@ -6,6 +6,6 @@ public class Trait : BaseEntity
     public string? Details { get; set; }
     public int? Value { get; set; }
     public int? Level { get; set; }
-    public int TraitGroupId { get; set; }
-    public TraitGroup TraitGroup { get; set; } = default!;
+    public int? TraitGroupId { get; set; }
+    public TraitGroup? TraitGroup { get; set; }
 }

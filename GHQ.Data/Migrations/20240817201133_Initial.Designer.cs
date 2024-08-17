@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GHQ.Data.Migrations
 {
     [DbContext(typeof(GHQContext))]
-    [Migration("20240817191244_Initial")]
+    [Migration("20240817201133_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -174,7 +174,6 @@ namespace GHQ.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CharacterId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -244,7 +243,7 @@ namespace GHQ.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("TraitGroupId")
+                    b.Property<int?>("TraitGroupId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -274,7 +273,7 @@ namespace GHQ.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharacterId")
+                    b.Property<int?>("CharacterId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -353,9 +352,7 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.Character", "Character")
                         .WithMany("Rolls")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CharacterId");
 
                     b.HasOne("GHQ.Data.Entities.Game", "Game")
                         .WithMany("Rolls")
@@ -372,9 +369,7 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.TraitGroup", "TraitGroup")
                         .WithMany("Traits")
-                        .HasForeignKey("TraitGroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("TraitGroupId");
 
                     b.Navigation("TraitGroup");
                 });
@@ -383,9 +378,7 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.Character", "Character")
                         .WithMany("TraitGroups")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CharacterId");
 
                     b.Navigation("Character");
                 });

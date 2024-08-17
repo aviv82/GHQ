@@ -25,11 +25,22 @@ public class CharacterService : BaseService<Character>, ICharacterService
         .Include(x => x.Player)
         .Include(x => x.Game)
         .Include(x => x.Rolls)
+        .Include(x => x.TraitGroups)
         .FirstAsync(cancellationToken);
 
         foreach (var roll in character.Rolls)
         {
+            roll.CharacterId = 0;
+            roll.Character = null;
             _context.Rolls.Remove(roll);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        foreach (var traitGroup in character.TraitGroups)
+        {
+            traitGroup.CharacterId = 0;
+            traitGroup.Character = null;
+            _context.TraitGroups.Remove(traitGroup);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

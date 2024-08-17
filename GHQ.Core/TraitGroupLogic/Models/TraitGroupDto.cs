@@ -11,10 +11,8 @@ public class TraitGroupDto : IMapFrom<TraitGroup>
     public int Id { get; set; }
     public string TraitGroupName { get; set; } = default!;
     public TraitType? Type { get; set; }
-    public int CharacterId { get; set; }
+    public int? CharacterId { get; set; }
     public List<TraitDto>? Traits { get; set; } = [];
-
-    // public CharacterDto Character { get; set; } = new CharacterDto();
 
     public void Mapping(Profile profile)
     {
@@ -29,8 +27,6 @@ public class TraitGroupDto : IMapFrom<TraitGroup>
             , ops => ops.MapFrom(src => TraitListMapper(src.Traits)))
         .ForMember(dest => dest.CharacterId
             , ops => ops.MapFrom(src => src.CharacterId));
-        // .ForMember(dest => dest.Character
-        //     , ops => ops.MapFrom(src => MapCharacter(src.Character)));
     }
 
     public List<TraitDto> TraitListMapper(ICollection<Trait> traitList)
@@ -48,7 +44,7 @@ public class TraitGroupDto : IMapFrom<TraitGroup>
                     Details = trait.Details ?? null,
                     Value = trait.Value ?? null,
                     Level = trait.Level ?? null,
-                    TraitGroupId = trait.TraitGroupId
+                    TraitGroupId = trait.TraitGroupId ?? 0
                 });
             }
         }

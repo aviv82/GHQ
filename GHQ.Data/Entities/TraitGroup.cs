@@ -6,7 +6,7 @@ public class TraitGroup : BaseEntity
 {
     public string TraitGroupName { get; set; } = default!;
     public TraitType? Type { get; set; }
-    public int CharacterId { get; set; }
-    public Character Character { get; set; } = default!;
+    public int? CharacterId { get; set; }
+    public Character? Character { get; set; }
     public ICollection<Trait> Traits { get; set; } = [];
 }
