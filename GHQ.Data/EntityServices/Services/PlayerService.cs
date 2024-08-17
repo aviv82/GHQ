@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using GHQ.Data.Context;
+﻿using GHQ.Data.Context;
 using GHQ.Data.Context.Interfaces;
 using GHQ.Data.Entities;
 using GHQ.Data.EntityServices.Interfaces;

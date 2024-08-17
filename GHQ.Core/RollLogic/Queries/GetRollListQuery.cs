@@ -37,9 +37,9 @@ public class GetRollListQuery : QueryBase, IQueryWithSorting, IQueryWithPaginati
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Game))
                                 => NameOf<Roll>.Full(m => m.Game),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.CharacterId))
-                                => NameOf<Roll>.Full(m => m.CharacterId),
+                                => NameOf<Roll>.Full(m => m.CharacterId ?? 0),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Character))
-                                => NameOf<Roll>.Full(m => m.Character),
+                                => NameOf<Roll>.Full(m => m.Character ?? new Character()),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.DicePool))
                                 => NameOf<Roll>.Full(m => m.DicePool),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Result))

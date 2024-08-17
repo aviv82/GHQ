@@ -15,8 +15,7 @@ public class TraitGroupConfiguration : BaseEntityConfiguration<TraitGroup>
 
         builder.HasOne(x => x.Character)
          .WithMany(y => y.TraitGroups)
-         .HasForeignKey(z => z.CharacterId)
-         .IsRequired();
+         .HasForeignKey(z => z.CharacterId);
 
         builder.HasMany(e => e.Traits)
             .WithOne(e => e.TraitGroup)

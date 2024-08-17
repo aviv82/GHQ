@@ -44,7 +44,7 @@ public class RollListVm : PaginationMetaData
             .ForMember(dest => dest.CharacterId
                 , ops => ops.MapFrom(src => src.CharacterId))
             .ForMember(dest => dest.Character
-                , ops => ops.MapFrom(src => MapCharacter(src.Character)))
+                , ops => ops.MapFrom(src => MapCharacter(src.Character ?? new Character())))
             .ForMember(dest => dest.DicePool
                 , ops => ops.MapFrom(src => MapDicePool(src.DicePool)))
             .ForMember(dest => dest.Result
@@ -73,8 +73,8 @@ public class RollListVm : PaginationMetaData
                 {
                     characterToReturn.Id = character.Id;
                     characterToReturn.Name = character.Name;
-                    characterToReturn.GameId = character.GameId;
-                    characterToReturn.PlayerId = character.PlayerId;
+                    characterToReturn.GameId = character.GameId ?? 0;
+                    characterToReturn.PlayerId = character.PlayerId ?? 0;
                     characterToReturn.Image = character.Image ?? "";
                 }
             }
@@ -107,25 +107,5 @@ public class RollListVm : PaginationMetaData
             }
             return playerToReturn;
         }
-
-        // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
-        // {
-        //     List<DiceDto> diceListToReturn = [];
-
-        //     if (diceList != null)
-        //     {
-        //         foreach (var dice in diceList)
-        //         {
-        //             diceListToReturn.Add(
-        //                 new DiceDto
-        //                 {
-        //                     Id = dice.Id,
-        //                     Value = dice.Value,
-        //                     Result = dice.Result
-        //                 });
-        //         }
-        //     }
-        //     return diceListToReturn;
-        // }
     }
 }

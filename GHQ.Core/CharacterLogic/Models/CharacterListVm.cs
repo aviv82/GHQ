@@ -20,8 +20,7 @@ public class CharacterListVm : PaginationMetaData
         public GameDto Game { get; set; } = new GameDto();
         public int PlayerId { get; set; }
         public PlayerDto Player { get; set; } = new PlayerDto();
-        // public List<RollDto> Rolls { get; set; } = [];
-        // public List<TraitGroupDto> TraitGroups { get; set; } = [];
+
 
         public void Mapping(Profile profile)
         {
@@ -35,15 +34,11 @@ public class CharacterListVm : PaginationMetaData
             .ForMember(dest => dest.GameId
                 , ops => ops.MapFrom(src => src.GameId))
             .ForMember(dest => dest.Game
-                , ops => ops.MapFrom(src => MapGame(src.Game)))
+                , ops => ops.MapFrom(src => MapGame(src.Game ?? new Game())))
             .ForMember(dest => dest.PlayerId
                 , ops => ops.MapFrom(src => src.PlayerId))
             .ForMember(dest => dest.Player
-                , ops => ops.MapFrom(src => MapPlayer(src.Player)));
-            // .ForMember(dest => dest.Rolls
-            //     , ops => ops.MapFrom(src => MapRollList(src.Rolls)))
-            // .ForMember(dest => dest.TraitGroups
-            //     , ops => ops.MapFrom(src => MapTraitGroupList(src.TraitGroups)));
+                , ops => ops.MapFrom(src => MapPlayer(src.Player ?? new Player())));
         }
 
         public PlayerDto MapPlayer(Player player)
@@ -73,82 +68,5 @@ public class CharacterListVm : PaginationMetaData
             }
             return gameToReturn;
         }
-        // public List<RollDto> MapRollList(ICollection<Roll> rollList)
-        // {
-        //     List<RollDto> rollListToReturn = new List<RollDto>();
-
-        //     if (rollList != null)
-        //     {
-        //         foreach (var roll in rollList)
-        //         {
-        //             rollListToReturn.Add(
-        //             new RollDto
-        //             {
-        //                 Id = roll.Id,
-        //                 Title = roll.Title,
-        //                 Description = roll.Description,
-        //                 Difficulty = roll.Difficulty,
-        //                 GameId = roll.GameId,
-        //                 CharacterId = roll.CharacterId,
-        //                 DicePool = MapDicePool(roll.DicePool),
-        //                 Result = roll.Result.ToList()
-        //             });
-        //         }
-        //     }
-        //     return rollListToReturn;
-        // }
-        // public List<DiceType> MapDicePool(List<DiceType> dicePool)
-        // {
-        //     List<DiceType> toReturn = [];
-        //     if (dicePool != null)
-        //     {
-        //         foreach (var dice in dicePool)
-        //         {
-        //             toReturn.Add(dice);
-        //         }
-        //     }
-        //     return toReturn;
-        // }
-
-        // public List<TraitGroupDto> MapTraitGroupList(ICollection<TraitGroup> traitGroupList)
-        // {
-        //     List<TraitGroupDto> listToReturn = [];
-
-        //     if (traitGroupList != null)
-        //     {
-        //         foreach (TraitGroup traitGroup in traitGroupList)
-        //         {
-        //             listToReturn.Add(new TraitGroupDto
-        //             {
-        //                 Id = traitGroup.Id,
-        //                 TraitGroupName = traitGroup.TraitGroupName,
-        //                 Type = traitGroup.Type,
-        //                 CharacterId = traitGroup.CharacterId
-        //             });
-        //         }
-        //     }
-
-        //     return listToReturn;
-        // }
-
-        // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
-        // {
-        //     List<DiceDto> diceListToReturn = [];
-
-        //     if (diceList != null)
-        //     {
-        //         foreach (var dice in diceList)
-        //         {
-        //             diceListToReturn.Add(
-        //                 new DiceDto
-        //                 {
-        //                     Id = dice.Id,
-        //                     Value = dice.Value,
-        //                     Result = dice.Result
-        //                 });
-        //         }
-        //     }
-        //     return diceListToReturn;
-        // }
     }
 }

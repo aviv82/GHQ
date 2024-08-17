@@ -19,16 +19,10 @@ public class RollConfiguration : BaseEntityConfiguration<Roll>
 
         builder.HasOne(x => x.Character)
          .WithMany(y => y.Rolls)
-         .HasForeignKey(z => z.CharacterId)
-         .IsRequired(true);
+         .HasForeignKey(z => z.CharacterId);
 
         builder.HasOne(x => x.Game)
          .WithMany(y => y.Rolls)
-         .HasForeignKey(z => z.GameId)
-         .IsRequired(true);
-
-        // builder.HasMany(e => e.DicePool)
-        //     .WithMany(e => e.Rolls)
-        //     .UsingEntity<DiceRoll>();
+         .HasForeignKey(z => z.GameId);
     }
 }

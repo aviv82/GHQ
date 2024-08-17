@@ -16,13 +16,11 @@ public class CharacterConfiguration : BaseEntityConfiguration<Character>
 
         builder.HasOne(x => x.Game)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.GameId)
-            .IsRequired();
+            .HasForeignKey(z => z.GameId);
 
         builder.HasOne(x => x.Player)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.PlayerId)
-            .IsRequired();
+            .HasForeignKey(z => z.PlayerId);
 
         builder.HasMany(e => e.TraitGroups)
             .WithOne(e => e.Character)

@@ -48,8 +48,8 @@ public class PlayerListVm : PaginationMetaData
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
-                                    GameId = x.GameId,
-                                    PlayerId = x.PlayerId,
+                                    GameId = x.GameId ?? 0,
+                                    PlayerId = x.PlayerId ?? 0,
                                     Image = x.Image ?? ""
                                 }));
             }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GHQ.Common;
 using GHQ.Common.Enums;
-using GHQ.Core.DiceLogic.Models;
 using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
@@ -66,8 +65,8 @@ public class GameListVm : PaginationMetaData
             {
                 characterToReturn.Id = character.Id;
                 characterToReturn.Name = character.Name;
-                characterToReturn.GameId = character.GameId;
-                characterToReturn.PlayerId = character.PlayerId;
+                characterToReturn.GameId = character.GameId ?? 0;
+                characterToReturn.PlayerId = character.PlayerId ?? 0;
                 characterToReturn.Image = character.Image ?? "";
             }
             return characterToReturn;
@@ -89,7 +88,7 @@ public class GameListVm : PaginationMetaData
                         Description = roll.Description,
                         Difficulty = roll.Difficulty,
                         GameId = roll.GameId,
-                        CharacterId = roll.CharacterId,
+                        CharacterId = roll.CharacterId ?? 0,
                         DicePool = MapDicePool(roll.DicePool),
                         Result = roll.Result.ToList()
                     });
@@ -135,26 +134,6 @@ public class GameListVm : PaginationMetaData
             }
             return playerToReturn;
         }
-
-        // public List<DiceDto> MapDiceList(ICollection<Dice> diceList)
-        // {
-        //     List<DiceDto> diceListToReturn = [];
-
-        //     if (diceList != null)
-        //     {
-        //         foreach (var dice in diceList)
-        //         {
-        //             diceListToReturn.Add(
-        //                 new DiceDto
-        //                 {
-        //                     Id = dice.Id,
-        //                     Value = dice.Value,
-        //                     Result = dice.Result
-        //                 });
-        //         }
-        //     }
-        //     return diceListToReturn;
-        // }
     }
 }
 
