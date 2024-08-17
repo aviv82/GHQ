@@ -9,9 +9,11 @@ namespace GHQ.Data.EntityServices.Services;
 public class PlayerService : BaseService<Player>, IPlayerService
 {
     private readonly IGHQContext _context;
-    public PlayerService(GHQContext context) : base(context)
+    private readonly ICharacterService _characterService;
+    public PlayerService(GHQContext context, ICharacterService characterService) : base(context)
     {
         _context = context;
+        _characterService = characterService;
     }
 
     public virtual async Task<Player> GetPlayerByIdIncludingGamesAndCharacters(int id, CancellationToken cancellationToken)
@@ -45,16 +47,17 @@ public class PlayerService : BaseService<Player>, IPlayerService
             .Include(x => x.Rolls)
             .FirstAsync(cancellationToken);
 
-            foreach (var roll in g.Rolls)
-            {
-                _context.Rolls.Remove(roll);
-                // await _context.SaveChangesAsync(cancellationToken);
-            }
+            // foreach (var roll in g.Rolls)
+            // {
+            //     _context.Rolls.Remove(roll);
+            //     await _context.SaveChangesAsync(cancellationToken);
+            // }
 
             foreach (var character in g.Characters)
             {
-                _context.Characters.Remove(character);
+                // _context.Characters.Remove(character);
                 // await _context.SaveChangesAsync(cancellationToken);
+                await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
             }
 
             g.Players = [];

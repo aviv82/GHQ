@@ -8,9 +8,11 @@ namespace GHQ.Data.EntityServices.Services;
 public class CharacterService : BaseService<Character>, ICharacterService
 {
     private readonly IGHQContext _context;
-    public CharacterService(IGHQContext context) : base(context)
+    private readonly ITraitGroupService _traitGroupService;
+    public CharacterService(IGHQContext context, ITraitGroupService traitGroupService) : base(context)
     {
         _context = context;
+        _traitGroupService = traitGroupService;
     }
 
     public async Task<Character> GetCharacterByIdIncludingPlayerAndGame(int id, CancellationToken cancellationToken)
@@ -28,20 +30,15 @@ public class CharacterService : BaseService<Character>, ICharacterService
         .Include(x => x.TraitGroups)
         .FirstAsync(cancellationToken);
 
-        foreach (var roll in character.Rolls)
-        {
-            roll.CharacterId = 0;
-            roll.Character = null;
-            _context.Rolls.Remove(roll);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        // foreach (var roll in character.Rolls)
+        // {
+        //     _context.Rolls.Remove(roll);
+        //     await _context.SaveChangesAsync(cancellationToken);
+        // }
 
         foreach (var traitGroup in character.TraitGroups)
         {
-            traitGroup.CharacterId = 0;
-            traitGroup.Character = null;
-            _context.TraitGroups.Remove(traitGroup);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _traitGroupService.DeleteCascadeAsync(traitGroup.Id, cancellationToken);
         }
 
         _context.Characters.Remove(character);
