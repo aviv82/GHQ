@@ -13,12 +13,12 @@ public class RollService : BaseService<Roll>, IRollService
         _context = context;
     }
 
-    public async Task<Roll> GetRollByIdIncludingGameAndCharacter(int id, CancellationToken cancellationToken)
-    {
-        return await _context.Rolls
-        .Where(x => x.Id == id)
-        .Include(x => x.Character)
-        .Include(x => x.Game)
-        .FirstAsync(cancellationToken);
-    }
+    // public async Task<Roll> GetRollByIdIncludingGameAndCharacter(int id, CancellationToken cancellationToken)
+    // {
+    //     return await _context.Rolls
+    //     .Where(x => x.Id == id)
+    //     .Include(x => x.Character)
+    //     .Include(x => x.Game)
+    //     .FirstAsync(cancellationToken);
+    // }
 }

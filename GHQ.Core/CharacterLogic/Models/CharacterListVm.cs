@@ -63,8 +63,8 @@ public class CharacterListVm : PaginationMetaData
                 gameToReturn.Id = game.Id;
                 gameToReturn.Title = game.Title;
                 gameToReturn.Type = game.Type;
-                gameToReturn.DmId = game.DmId;
-                gameToReturn.Dm = MapPlayer(game.Dm);
+                gameToReturn.DmId = game.DmId ?? 0;
+                gameToReturn.Dm = MapPlayer(game.Dm ?? new());
             }
             return gameToReturn;
         }

@@ -16,12 +16,14 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IGHQContext>(provider => provider.GetService<GHQContext>()!);
+
         services.AddScoped<IGameService, GameService>();
         services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<ICharacterService, CharacterService>();
-        services.AddScoped<IRollService, RollService>();
-        services.AddScoped<ITraitService, TraitService>();
-        services.AddScoped<ITraitGroupService, TraitGroupService>();
+
+        // services.AddScoped<IRollService, RollService>();
+        // services.AddScoped<ITraitService, TraitService>();
+        // services.AddScoped<ITraitGroupService, TraitGroupService>();
 
         // services.AddScoped<IDiceService, DiceService>();
 

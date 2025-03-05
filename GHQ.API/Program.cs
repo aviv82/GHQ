@@ -1,5 +1,4 @@
 using GHQ.API;
-using GHQ.Common;
 using GHQ.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +17,9 @@ if (builder.Environment.IsDevelopment())
     builder.Configuration.AddJsonFile("appsettings.Development.json");
 }
 
-connection = builder.Configuration.GetConnectionString(Constants.ConnectionStrings.GHQDataBaseConnectionString);
+connection = builder.Configuration.GetConnectionString(GHQ.Common.Constants.ConnectionStrings.GHQDataBaseConnectionString) ?? "";
 
-AddGHQDataAccess(builder.Services, connection ?? "");
+AddGHQDataAccess(builder.Services, connection);
 RegisterApplicationDependencies(builder.Services);
 // Add services to the container.
 

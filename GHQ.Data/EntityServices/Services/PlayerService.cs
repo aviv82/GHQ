@@ -22,23 +22,27 @@ public class PlayerService : BaseService<Player>, IPlayerService
     {
         return await _context.Players.Where(x => x.Id == id).Include(x => x.DmGames).Include(x => x.PlayerGames).Include(x => x.Characters).FirstAsync(cancellationToken);
     }
+
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    {
+        var player = await _context.Players.Where(x => x.Id == id).SingleOrDefaultAsync(cancellationToken);
+
+        if (player != null)
+        {
+            _context.Players.Remove(player);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        return;
+    }
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         Player player = await GetPlayerByIdIncludingGamesAndCharacters(id, cancellationToken);
 
         foreach (var character in player.Characters)
         {
-            // _context.Characters.Remove(character);
-            // await _context.SaveChangesAsync(cancellationToken);
             await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
         }
-
-        // foreach (var game in player.PlayerGames)
-        // {
-        // var g = await _context.Games.Where(x => x.Id == game.Id).Include(x => x.Players).FirstAsync(cancellationToken);
-        // g.Players.Remove(player);
-        // await _context.SaveChangesAsync(cancellationToken);
-        // }
 
         foreach (var game in player.DmGames)
         {
@@ -47,27 +51,9 @@ public class PlayerService : BaseService<Player>, IPlayerService
             .Include(x => x.Dm)
             .Include(x => x.Players)
             .Include(x => x.Characters)
-            .Include(x => x.Rolls)
+            // .Include(x => x.Rolls)
             .FirstAsync(cancellationToken);
 
-            // foreach (var roll in g.Rolls)
-            // {
-            //     _context.Rolls.Remove(roll);
-            //     await _context.SaveChangesAsync(cancellationToken);
-            // }
-
-            // foreach (var character in g.Characters)
-            // {
-            // _context.Characters.Remove(character);
-            // await _context.SaveChangesAsync(cancellationToken);
-            // await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
-            // }
-
-            // g.Players = [];
-            // g.Dm.DmGames.Remove(g);
-
-            // _context.Games.Remove(g);
-            // await _context.SaveChangesAsync(cancellationToken);
             await _gameService.DeleteCascadeAsync(g.Id, cancellationToken);
         }
 

@@ -28,7 +28,7 @@ public class PlayerListVm : PaginationMetaData
             .ForMember(dest => dest.UserName
                 , ops => ops.MapFrom(src => src.UserName))
             .ForMember(dest => dest.Email
-                , ops => ops.MapFrom(src => src.Email ?? ""))
+                , ops => ops.MapFrom(src => src.Email ?? string.Empty))
             .ForMember(dest => dest.PlayerGames
                 , ops => ops.MapFrom(src => MapGames(src.PlayerGames)))
             .ForMember(dest => dest.DmGames
@@ -48,9 +48,9 @@ public class PlayerListVm : PaginationMetaData
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
-                                    GameId = x.GameId ?? 0,
-                                    PlayerId = x.PlayerId ?? 0,
-                                    Image = x.Image ?? ""
+                                    GameId = x.GameId,
+                                    PlayerId = x.PlayerId,
+                                    Image = x.Image ?? string.Empty
                                 }));
             }
             return charactersToReturn;
@@ -65,7 +65,7 @@ public class PlayerListVm : PaginationMetaData
                                 new GameDto
                                 {
                                     Id = x.Id,
-                                    DmId = x.DmId,
+                                    DmId = x.DmId ?? 0,
                                     Title = x.Title,
                                     Type = x.Type
                                 }));

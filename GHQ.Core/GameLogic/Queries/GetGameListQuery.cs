@@ -31,16 +31,16 @@ public class GetGameListQuery : QueryBase, IQueryWithSorting, IQueryWithPaginati
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.Type))
                                 => NameOf<Game>.Full(m => m.Type),
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.DmId))
-                                => NameOf<Game>.Full(m => m.DmId),
+                                => NameOf<Game>.Full(m => m.DmId ?? 0),
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.Dm))
-                                => NameOf<Game>.Full(m => m.Dm),
+                                => NameOf<Game>.Full(m => m.Dm ?? new()),
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.Players))
                                 => NameOf<Game>.Full(m => m.Players),
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.Characters))
                                 => NameOf<Game>.Full(m => m.Characters),
                         { } s when NameEquals(s, nameof(GameListVm.GameDto.Rolls))
-                                => NameOf<Game>.Full(m => m.Rolls),
-                        { } s when typeof(Game).GetProperties().Any(x => NameEquals(x.Name, name))
+                        //         => NameOf<Game>.Full(m => m.Rolls),
+                        // { } s when typeof(Game).GetProperties().Any(x => NameEquals(x.Name, name))
                                 => name,
                         _ => string.Empty
                 };

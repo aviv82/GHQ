@@ -73,9 +73,9 @@ public class RollListVm : PaginationMetaData
                 {
                     characterToReturn.Id = character.Id;
                     characterToReturn.Name = character.Name;
-                    characterToReturn.GameId = character.GameId ?? 0;
-                    characterToReturn.PlayerId = character.PlayerId ?? 0;
-                    characterToReturn.Image = character.Image ?? "";
+                    characterToReturn.GameId = character.GameId;
+                    characterToReturn.PlayerId = character.PlayerId;
+                    characterToReturn.Image = character.Image ?? string.Empty;
                 }
             }
             return characterToReturn;
@@ -90,7 +90,7 @@ public class RollListVm : PaginationMetaData
                 gameToReturn.Id = game.Id;
                 gameToReturn.Title = game.Title;
                 gameToReturn.Type = game.Type;
-                gameToReturn.DmId = game.DmId;
+                gameToReturn.DmId = game.DmId ?? 0;
                 gameToReturn.Dm = MapPlayer(game.Dm);
             }
             return gameToReturn;

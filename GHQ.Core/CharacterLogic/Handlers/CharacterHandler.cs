@@ -111,7 +111,8 @@ public class CharacterHandler : ICharacterHandler
         {
             var character = await _characterService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (character == null) { throw new Exception("Character not found"); };
+            if (character == null) { throw new Exception("Character not found"); }
+            ;
 
             character.Name = request.Name;
             if (request.Image != null)
@@ -136,9 +137,11 @@ public class CharacterHandler : ICharacterHandler
         {
             var character = await _characterService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (character == null) { throw new Exception("Character not found"); };
+            if (character == null) { throw new Exception("Character not found"); }
 
-            await _characterService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _characterService.DeleteAsync(request.Id, cancellationToken);
+
+            // await _characterService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

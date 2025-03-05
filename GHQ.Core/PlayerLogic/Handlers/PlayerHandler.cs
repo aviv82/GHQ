@@ -69,10 +69,11 @@ public class PlayerHandler : IPlayerHandler
             Player playerToAdd = new Player
             {
                 UserName = request.UserName,
-                Email = request.Email,
-                PasswordHash = request.PasswordHash,
+                Email = request.Email ?? string.Empty,
+                PasswordHash = request.PasswordHash ?? string.Empty,
                 DmGames = new List<Game>(),
                 PlayerGames = new List<Game>(),
+                // PlayerGames = new List<PlayerGame>(),
             };
 
             Player newPlayer = await _playerService.InsertAsync(playerToAdd, cancellationToken);
@@ -95,7 +96,8 @@ public class PlayerHandler : IPlayerHandler
         {
             var player = await _playerService.GetPlayerByIdIncludingGamesAndCharacters(request.Id, cancellationToken);
 
-            if (player == null) { throw new Exception("Player not found"); };
+            if (player == null) { throw new Exception("Player not found"); }
+            ;
 
             player.UserName = request.UserName;
             player.Email = request.Email;
@@ -117,9 +119,10 @@ public class PlayerHandler : IPlayerHandler
         {
             var player = await _playerService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (player == null) { throw new Exception("Player not found"); };
+            if (player == null) { throw new Exception("Player not found"); }
 
-            await _playerService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _playerService.DeleteAsync(request.Id, cancellationToken);
+            // await _playerService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

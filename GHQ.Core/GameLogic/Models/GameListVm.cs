@@ -40,9 +40,9 @@ public class GameListVm : PaginationMetaData
             .ForMember(dest => dest.Players
                 , ops => ops.MapFrom(src => MapPlayerList(src.Players)))
             .ForMember(dest => dest.Characters
-                , ops => ops.MapFrom(src => MapCharacterList(src.Characters)))
-            .ForMember(dest => dest.Rolls
-                , ops => ops.MapFrom(src => MapRollList(src.Rolls)));
+                , ops => ops.MapFrom(src => MapCharacterList(src.Characters)));
+            // .ForMember(dest => dest.Rolls
+            //     , ops => ops.MapFrom(src => MapRollList(src.Rolls)));
         }
 
         public List<CharacterDto> MapCharacterList(ICollection<Character> list)
@@ -51,7 +51,8 @@ public class GameListVm : PaginationMetaData
 
             if (list != null)
             {
-                foreach (var character in list) { characterListToReturn.Add(MapCharacter(character)); };
+                foreach (var character in list) { characterListToReturn.Add(MapCharacter(character)); }
+                ;
             }
 
             return characterListToReturn;
@@ -65,9 +66,9 @@ public class GameListVm : PaginationMetaData
             {
                 characterToReturn.Id = character.Id;
                 characterToReturn.Name = character.Name;
-                characterToReturn.GameId = character.GameId ?? 0;
-                characterToReturn.PlayerId = character.PlayerId ?? 0;
-                characterToReturn.Image = character.Image ?? "";
+                characterToReturn.GameId = character.GameId;
+                characterToReturn.PlayerId = character.PlayerId;
+                characterToReturn.Image = character.Image ?? string.Empty;
             }
             return characterToReturn;
         }
@@ -116,7 +117,8 @@ public class GameListVm : PaginationMetaData
 
             if (list != null)
             {
-                foreach (var player in list) { playerListToReturn.Add(MapPlayer(player)); };
+                foreach (var player in list) { playerListToReturn.Add(MapPlayer(player)); }
+                ;
             }
 
             return playerListToReturn;

@@ -81,6 +81,7 @@ public class GameHandler : IGameHandler
                 DmId = request.DmId,
                 Dm = new Player(),
                 Players = new List<Player>(),
+                // Players = new List<PlayerGame>(),
             };
 
             Player dm = await _playerService.GetByIdAsync(request.DmId, cancellationToken) ?? new Player();
@@ -106,7 +107,8 @@ public class GameHandler : IGameHandler
         {
             var game = await _gameService.GetGameByIdIncludingPlayersAndCharacters(request.Id, cancellationToken);
 
-            if (game == null) { throw new Exception("Game not found"); };
+            if (game == null) { throw new Exception("Game not found"); }
+            ;
 
             game.Title = request.Title ?? game.Title;
             game.Type = request.Type ?? game.Type;
@@ -120,7 +122,8 @@ public class GameHandler : IGameHandler
                 {
                     var newDm = playerList.FirstOrDefault(x => x.Id == request.DmId);
 
-                    if (newDm == null) { throw new Exception("Player game DM not found"); };
+                    if (newDm == null) { throw new Exception("Player game DM not found"); }
+                    ;
 
                     game.Dm = newDm;
                     game.DmId = request.DmId ?? game.DmId;
@@ -134,7 +137,8 @@ public class GameHandler : IGameHandler
                     {
                         Player? listPlayer = playerList.FirstOrDefault(x => x.Id == p.Id);
 
-                        if (listPlayer == null) { throw new Exception("Player game Player not found"); };
+                        if (listPlayer == null) { throw new Exception("Player game Player not found"); }
+                        ;
 
                         game.Players.Add(listPlayer);
                     });
@@ -158,9 +162,11 @@ public class GameHandler : IGameHandler
         {
             var game = await _gameService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (game == null) { throw new Exception("Game not found"); };
+            if (game == null) { throw new Exception("Game not found"); }
 
-            await _gameService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _gameService.DeleteAsync(request.Id, cancellationToken);
+
+            // await _gameService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

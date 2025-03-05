@@ -1,4 +1,5 @@
 ﻿using GHQ.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GHQ.Data.EntityConfiguration;
@@ -16,18 +17,20 @@ public class CharacterConfiguration : BaseEntityConfiguration<Character>
 
         builder.HasOne(x => x.Game)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.GameId);
+            .HasForeignKey(z => z.GameId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Player)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.PlayerId);
+            .HasForeignKey(z => z.PlayerId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(e => e.TraitGroups)
-            .WithOne(e => e.Character)
-            .HasForeignKey(e => e.CharacterId);
+        // builder.HasMany(e => e.TraitGroups)
+        //     .WithOne(e => e.Character)
+        //     .HasForeignKey(e => e.CharacterId);
 
-        builder.HasMany(e => e.Rolls)
-            .WithOne(e => e.Character)
-            .HasForeignKey(e => e.CharacterId);
+        // builder.HasMany(e => e.Rolls)
+        //     .WithOne(e => e.Character)
+        //     .HasForeignKey(e => e.CharacterId);
     }
 }

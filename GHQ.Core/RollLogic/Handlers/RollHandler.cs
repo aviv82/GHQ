@@ -57,20 +57,20 @@ public class RollHandler : IRollHandler
         };
     }
 
-    public async Task<RollDto> GetRollById(
-    GetRollByIdQuery request,
-    CancellationToken cancellationToken)
-    {
-        Roll? query = await _rollService.GetRollByIdIncludingGameAndCharacter(request.Id, cancellationToken);
+    // public async Task<RollDto> GetRollById(
+    // GetRollByIdQuery request,
+    // CancellationToken cancellationToken)
+    // {
+    //     Roll? query = await _rollService.GetRollByIdIncludingGameAndCharacter(request.Id, cancellationToken);
 
-        if (query == null) { throw new Exception("Roll not found"); }
+    //     if (query == null) { throw new Exception("Roll not found"); }
 
-        List<Roll> rollList = new List<Roll> { query };
+    //     List<Roll> rollList = new List<Roll> { query };
 
-        var toReturn = rollList.AsQueryable().ProjectTo<RollDto>(_mapper.ConfigurationProvider);
+    //     var toReturn = rollList.AsQueryable().ProjectTo<RollDto>(_mapper.ConfigurationProvider);
 
-        return toReturn.First();
-    }
+    //     return toReturn.First();
+    // }
 
     public async Task<RollDto> AddRoll(
     AddRollRequest request,
@@ -141,7 +141,8 @@ public class RollHandler : IRollHandler
         {
             var roll = await _rollService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (roll == null) { throw new Exception("Roll not found"); };
+            if (roll == null) { throw new Exception("Roll not found"); }
+            ;
 
             await _rollService.DeleteAsync(roll, cancellationToken);
         }
