@@ -67,12 +67,13 @@ public class GameService : BaseService<Game>, IGameService
         foreach (var character in game.Characters)
         {
             character.GameId = null;
-
-            await _context.SaveChangesAsync(cancellationToken);
-            await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
         }
 
+        await _context.SaveChangesAsync(cancellationToken);
+        await _characterService.DeleteNullGameCharactersAsync(cancellationToken);
 
+        // await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
+        game.Characters = [];
         game.Players = [];
         await _context.SaveChangesAsync(cancellationToken);
 

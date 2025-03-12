@@ -54,10 +54,8 @@ public class PlayerService : BaseService<Player>, IPlayerService
         await _gameService.DeleteNullDmGamesAsync(cancellationToken);
 
         player.DmGames = [];
-
         player.PlayerGames = [];
         await _context.SaveChangesAsync(cancellationToken);
-
 
         _context.Players.Remove(player);
         await _context.SaveChangesAsync(cancellationToken);

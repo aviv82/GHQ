@@ -35,12 +35,26 @@ public class CharacterService : BaseService<Character>, ICharacterService
         return;
     }
 
+    public async Task DeleteNullGameCharactersAsync(CancellationToken cancellationToken)
+    {
+        var characters = await _context.Characters
+        .Where(x => x.GameId == null)
+        .Include(x => x.Game)
+        // .Include(x => x.Rolls)
+        .ToListAsync(cancellationToken);
+
+        foreach (var character in characters)
+        {
+            await DeleteCascadeAsync(character.Id, cancellationToken);
+        }
+    }
+
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         var character = await _context.Characters
         .Where(x => x.Id == id)
-        .Include(x => x.Player)
-        .Include(x => x.Game)
+        // .Include(x => x.Player)
+        // .Include(x => x.Game)
         // .Include(x => x.Rolls)
         // .Include(x => x.TraitGroups)
         .FirstAsync(cancellationToken);
