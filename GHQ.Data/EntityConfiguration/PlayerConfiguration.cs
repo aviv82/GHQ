@@ -16,31 +16,23 @@ public class PlayerConfiguration : BaseEntityConfiguration<Player>
         .IsRequired()
         .HasMaxLength(256);
 
-        builder.Property(x => x.Email).HasMaxLength(256);
-        builder.Property(x => x.PasswordHash).HasMaxLength(1000);
+        builder.Property(x => x.Email)
+        .HasMaxLength(256);
 
-        // builder.HasMany(e => e.PlayerGames)
-        //     .WithOne(e => e.Player)
-        //     .HasForeignKey(x => x.PlayerId)
-        //     .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(x => x.PasswordHash)
+        .HasMaxLength(1000);
 
         builder.HasMany(x => x.PlayerGames)
                 .WithMany(e => e.Players)
                 .UsingEntity<PlayerGame>();
 
-        // .UsingEntity<Dictionary<string, object>>(
-        //     "PlayerGames",
-        //     x => x.HasOne<Game>().WithMany().OnDelete(DeleteBehavior.NoAction),
-        //     x => x.HasOne<Player>().WithMany().OnDelete(DeleteBehavior.Cascade));
-
         builder.HasMany(e => e.DmGames)
             .WithOne(e => e.Dm)
-            .HasForeignKey(e => e.DmId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey(e => e.DmId);
 
         builder.HasMany(e => e.Characters)
             .WithOne(e => e.Player)
-            .HasForeignKey(e => e.PlayerId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey(e => e.PlayerId);
+
     }
 }

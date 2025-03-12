@@ -121,8 +121,7 @@ public class PlayerHandler : IPlayerHandler
 
             if (player == null) { throw new Exception("Player not found"); }
 
-            await _playerService.DeleteAsync(request.Id, cancellationToken);
-            // await _playerService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _playerService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

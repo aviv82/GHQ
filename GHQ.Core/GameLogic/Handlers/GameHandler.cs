@@ -56,7 +56,7 @@ public class GameHandler : IGameHandler
        GetGameByIdQuery request,
        CancellationToken cancellationToken)
     {
-        Game? query = await _gameService.GetGameByIdIncludingPlayersAndCharacters(request.Id, cancellationToken);
+        Game? query = await _gameService.GetGameByIdIncludingPlayersCharactersAndRolls(request.Id, cancellationToken);
 
         if (query == null) { throw new Exception("Game not found"); }
 
@@ -81,7 +81,6 @@ public class GameHandler : IGameHandler
                 DmId = request.DmId,
                 Dm = new Player(),
                 Players = new List<Player>(),
-                // Players = new List<PlayerGame>(),
             };
 
             Player dm = await _playerService.GetByIdAsync(request.DmId, cancellationToken) ?? new Player();
@@ -105,7 +104,7 @@ public class GameHandler : IGameHandler
     {
         try
         {
-            var game = await _gameService.GetGameByIdIncludingPlayersAndCharacters(request.Id, cancellationToken);
+            var game = await _gameService.GetGameByIdIncludingPlayersCharactersAndRolls(request.Id, cancellationToken);
 
             if (game == null) { throw new Exception("Game not found"); }
             ;
@@ -164,9 +163,7 @@ public class GameHandler : IGameHandler
 
             if (game == null) { throw new Exception("Game not found"); }
 
-            await _gameService.DeleteAsync(request.Id, cancellationToken);
-
-            // await _gameService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _gameService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

@@ -29,7 +29,7 @@ public class GetCharacterListQuery : QueryBase, IQueryWithSorting, IQueryWithPag
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Name))
                                 => NameOf<Character>.Full(m => m.Name),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Image))
-                                => NameOf<Character>.Full(m => m.Image ?? ""),
+                                => NameOf<Character>.Full(m => m.Image),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.GameId))
                                 => NameOf<Character>.Full(m => m.GameId),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Game))

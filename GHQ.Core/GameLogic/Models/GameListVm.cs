@@ -18,8 +18,8 @@ public class GameListVm : PaginationMetaData
         public int Id { get; set; }
         public string Title { get; set; } = default!;
         public GameType Type { get; set; }
-        public int DmId { get; set; }
-        public PlayerDto Dm { get; set; } = new PlayerDto();
+        public int? DmId { get; set; }
+        public PlayerDto? Dm { get; set; }
         public List<PlayerDto> Players { get; set; } = [];
         public List<CharacterDto> Characters { get; set; } = [];
         public List<RollDto> Rolls { get; set; } = [];
@@ -68,7 +68,7 @@ public class GameListVm : PaginationMetaData
                 characterToReturn.Name = character.Name;
                 characterToReturn.GameId = character.GameId;
                 characterToReturn.PlayerId = character.PlayerId;
-                characterToReturn.Image = character.Image ?? string.Empty;
+                characterToReturn.Image = character.Image;
             }
             return characterToReturn;
         }
@@ -117,23 +117,25 @@ public class GameListVm : PaginationMetaData
 
             if (list != null)
             {
-                foreach (var player in list) { playerListToReturn.Add(MapPlayer(player)); }
-                ;
+                foreach (var player in list)
+                {
+                    playerListToReturn.Add(MapPlayer(player));
+                }
             }
 
             return playerListToReturn;
         }
 
-        public PlayerDto MapPlayer(Player player)
+        public PlayerDto? MapPlayer(Player player)
         {
+            if (player == null) return null;
+
             PlayerDto playerToReturn = new PlayerDto();
 
-            if (player != null)
-            {
-                playerToReturn.Id = player.Id;
-                playerToReturn.UserName = player.UserName;
-                playerToReturn.Email = player.Email ?? "";
-            }
+            playerToReturn.Id = player.Id;
+            playerToReturn.UserName = player.UserName;
+            playerToReturn.Email = player.Email;
+
             return playerToReturn;
         }
     }

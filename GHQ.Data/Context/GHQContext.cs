@@ -25,9 +25,6 @@ public class GHQContext : DbContext, IGHQContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GHQContext).Assembly);
 
-        // modelBuilder.Entity<PlayerGame>()
-        // .HasKey(x => x.Id);
-
         modelBuilder.Entity<PlayerGame>()
         .HasIndex(e => e.GameId);
         modelBuilder.Entity<PlayerGame>()
@@ -37,7 +34,7 @@ public class GHQContext : DbContext, IGHQContext
             .HasIndex(e => new { e.PlayerId, e.GameId })
             .IsUnique();
 
-        // RemoveCascadeDeleteBehaviors(modelBuilder);
+        RemoveCascadeDeleteBehaviors(modelBuilder);
     }
 
     public DbSet<T> GetSet<T>()
@@ -55,7 +52,7 @@ public class GHQContext : DbContext, IGHQContext
 
         foreach (var foreignKey in foreignKeysWithCascadeDelete)
         {
-            foreignKey.DeleteBehavior = DeleteBehavior.ClientCascade;
+            foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
         }
     }
 

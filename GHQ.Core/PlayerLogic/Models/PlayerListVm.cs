@@ -65,7 +65,7 @@ public class PlayerListVm : PaginationMetaData
                                 new GameDto
                                 {
                                     Id = x.Id,
-                                    DmId = x.DmId ?? 0,
+                                    DmId = x.DmId,
                                     Title = x.Title,
                                     Type = x.Type
                                 }));

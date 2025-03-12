@@ -41,21 +41,23 @@ public class PlayerService : BaseService<Player>, IPlayerService
 
         foreach (var character in player.Characters)
         {
-            await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
+            character.PlayerId = null;
         }
+        await _context.SaveChangesAsync(cancellationToken);
 
         foreach (var game in player.DmGames)
         {
-            var g = await _context.Games
-            .Where(x => x.Id == game.Id)
-            .Include(x => x.Dm)
-            .Include(x => x.Players)
-            .Include(x => x.Characters)
-            // .Include(x => x.Rolls)
-            .FirstAsync(cancellationToken);
-
-            await _gameService.DeleteCascadeAsync(g.Id, cancellationToken);
+            game.DmId = null;
         }
+        await _context.SaveChangesAsync(cancellationToken);
+
+        await _gameService.DeleteNullDmGamesAsync(cancellationToken);
+
+        player.DmGames = [];
+
+        player.PlayerGames = [];
+        await _context.SaveChangesAsync(cancellationToken);
+
 
         _context.Players.Remove(player);
         await _context.SaveChangesAsync(cancellationToken);

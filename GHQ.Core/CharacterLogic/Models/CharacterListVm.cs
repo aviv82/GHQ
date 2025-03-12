@@ -16,10 +16,10 @@ public class CharacterListVm : PaginationMetaData
         public int Id { get; set; }
         public string Name { get; set; } = default!;
         public string? Image { get; set; }
-        public int GameId { get; set; }
-        public GameDto Game { get; set; } = new GameDto();
-        public int PlayerId { get; set; }
-        public PlayerDto Player { get; set; } = new PlayerDto();
+        public int? GameId { get; set; }
+        public GameDto? Game { get; set; }
+        public int? PlayerId { get; set; }
+        public PlayerDto? Player { get; set; }
 
 
         public void Mapping(Profile profile)
@@ -34,11 +34,11 @@ public class CharacterListVm : PaginationMetaData
             .ForMember(dest => dest.GameId
                 , ops => ops.MapFrom(src => src.GameId))
             .ForMember(dest => dest.Game
-                , ops => ops.MapFrom(src => MapGame(src.Game ?? new Game())))
+                , ops => ops.MapFrom(src => MapGame(src.Game)))
             .ForMember(dest => dest.PlayerId
                 , ops => ops.MapFrom(src => src.PlayerId))
             .ForMember(dest => dest.Player
-                , ops => ops.MapFrom(src => MapPlayer(src.Player ?? new Player())));
+                , ops => ops.MapFrom(src => MapPlayer(src.Player)));
         }
 
         public PlayerDto MapPlayer(Player player)
@@ -49,7 +49,7 @@ public class CharacterListVm : PaginationMetaData
             {
                 playerToReturn.Id = player.Id;
                 playerToReturn.UserName = player.UserName;
-                playerToReturn.Email = player.Email ?? "";
+                playerToReturn.Email = player.Email;
             }
             return playerToReturn;
         }
@@ -63,8 +63,8 @@ public class CharacterListVm : PaginationMetaData
                 gameToReturn.Id = game.Id;
                 gameToReturn.Title = game.Title;
                 gameToReturn.Type = game.Type;
-                gameToReturn.DmId = game.DmId ?? 0;
-                gameToReturn.Dm = MapPlayer(game.Dm ?? new());
+                gameToReturn.DmId = game.DmId;
+                gameToReturn.Dm = MapPlayer(game.Dm);
             }
             return gameToReturn;
         }

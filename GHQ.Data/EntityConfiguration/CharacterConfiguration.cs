@@ -12,18 +12,20 @@ public class CharacterConfiguration : BaseEntityConfiguration<Character>
 
     protected override void ConfigureEntity(EntityTypeBuilder<Character> builder)
     {
-        builder.Property(x => x.Name).IsRequired().HasMaxLength(256);
-        builder.Property(x => x.Image).HasMaxLength(256);
+        builder.Property(x => x.Name)
+        .IsRequired()
+        .HasMaxLength(256);
+
+        builder.Property(x => x.Image)
+        .HasMaxLength(256);
 
         builder.HasOne(x => x.Game)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.GameId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(z => z.GameId);
 
         builder.HasOne(x => x.Player)
             .WithMany(y => y.Characters)
-            .HasForeignKey(z => z.PlayerId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(z => z.PlayerId);
 
         // builder.HasMany(e => e.TraitGroups)
         //     .WithOne(e => e.Character)
