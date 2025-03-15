@@ -2,6 +2,7 @@
 
 public enum GameType
 {
+    Default,
     Cortex,
     WorldOfDarkness
 }

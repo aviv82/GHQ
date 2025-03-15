@@ -11,12 +11,12 @@ public class GHQContext : DbContext, IGHQContext
 
     public GHQContext(DbContextOptions<GHQContext> options) : base(options) { }
 
-    public virtual DbSet<Game> Games { get; set; }
     public virtual DbSet<Character> Characters { get; set; }
+    public virtual DbSet<Game> Games { get; set; }
     public virtual DbSet<Player> Players { get; set; }
+    public virtual DbSet<TraitGroup> TraitGroups { get; set; }
 
     // public virtual DbSet<Roll> Rolls { get; set; }
-    // public virtual DbSet<TraitGroup> TraitGroups { get; set; }
     // public virtual DbSet<Trait> Traits { get; set; }
 
     public DbSet<PlayerGame> PlayerGames { get; set; }

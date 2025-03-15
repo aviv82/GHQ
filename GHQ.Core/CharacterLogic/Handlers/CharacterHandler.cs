@@ -139,9 +139,7 @@ public class CharacterHandler : ICharacterHandler
 
             if (character == null) { throw new Exception("Character not found"); }
 
-            await _characterService.DeleteAsync(request.Id, cancellationToken);
-
-            // await _characterService.DeleteCascadeAsync(request.Id, cancellationToken);
+            await _characterService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {

@@ -8,5 +8,5 @@ public class TraitGroup : BaseEntity
     public TraitType? Type { get; set; }
     public int? CharacterId { get; set; }
     public Character? Character { get; set; }
-    public ICollection<Trait> Traits { get; set; } = [];
+    // public ICollection<Trait> Traits { get; set; } = [];
 }

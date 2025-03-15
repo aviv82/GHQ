@@ -8,7 +8,6 @@ public class Character : BaseEntity
     public Game? Game { get; set; }
     public int? PlayerId { get; set; }
     public Player? Player { get; set; }
-
-    // public ICollection<TraitGroup> TraitGroups { get; set; } = [];
+    public ICollection<TraitGroup> TraitGroups { get; set; } = [];
     // public ICollection<Roll> Rolls { get; set; } = [];
 }

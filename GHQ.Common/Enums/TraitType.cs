@@ -2,7 +2,8 @@
 {
     public enum TraitType
     {
-        TraitCollection,
-        Spectrum,
+        Default,
+        Collection,
+        Spectrum
     }
 }

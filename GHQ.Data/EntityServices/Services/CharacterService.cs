@@ -39,8 +39,6 @@ public class CharacterService : BaseService<Character>, ICharacterService
     {
         var characters = await _context.Characters
         .Where(x => x.GameId == null)
-        .Include(x => x.Game)
-        // .Include(x => x.Rolls)
         .ToListAsync(cancellationToken);
 
         foreach (var character in characters)
@@ -53,22 +51,26 @@ public class CharacterService : BaseService<Character>, ICharacterService
     {
         var character = await _context.Characters
         .Where(x => x.Id == id)
-        // .Include(x => x.Player)
-        // .Include(x => x.Game)
+        .Include(x => x.TraitGroups)
         // .Include(x => x.Rolls)
-        // .Include(x => x.TraitGroups)
         .FirstAsync(cancellationToken);
 
         // foreach (var roll in character.Rolls)
         // {
         //     _context.Rolls.Remove(roll);
-        //     await _context.SaveChangesAsync(cancellationToken);
         // }
 
-        // foreach (var traitGroup in character.TraitGroups)
-        // {
-        //     await _traitGroupService.DeleteCascadeAsync(traitGroup.Id, cancellationToken);
-        // }
+        foreach (var traitGroup in character.TraitGroups)
+        {
+            traitGroup.CharacterId = null;
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // await _traitGroupService.DeleteCascadeAsync(traitGroup.Id, cancellationToken);
+
+        character.GameId = null;
+        character.PlayerId = null;
+        await _context.SaveChangesAsync(cancellationToken);
 
         _context.Characters.Remove(character);
         await _context.SaveChangesAsync(cancellationToken);

@@ -12,7 +12,7 @@ public class TraitGroupDto : IMapFrom<TraitGroup>
     public string TraitGroupName { get; set; } = default!;
     public TraitType? Type { get; set; }
     public int? CharacterId { get; set; }
-    public List<TraitDto>? Traits { get; set; } = [];
+    // public List<TraitDto>? Traits { get; set; } = [];
 
     public void Mapping(Profile profile)
     {
@@ -23,33 +23,33 @@ public class TraitGroupDto : IMapFrom<TraitGroup>
             , ops => ops.MapFrom(src => src.TraitGroupName))
         .ForMember(dest => dest.Type
             , ops => ops.MapFrom(src => src.Type))
-        .ForMember(dest => dest.Traits
-            , ops => ops.MapFrom(src => TraitListMapper(src.Traits)))
+        // .ForMember(dest => dest.Traits
+        //     , ops => ops.MapFrom(src => TraitListMapper(src.Traits)))
         .ForMember(dest => dest.CharacterId
             , ops => ops.MapFrom(src => src.CharacterId));
     }
 
-    public List<TraitDto> TraitListMapper(ICollection<Trait> traitList)
-    {
-        List<TraitDto> listToReturn = [];
+    // public List<TraitDto> TraitListMapper(ICollection<Trait> traitList)
+    // {
+    //     List<TraitDto> listToReturn = [];
 
-        if (traitList != null)
-        {
-            foreach (Trait trait in traitList)
-            {
-                listToReturn.Add(new TraitDto
-                {
-                    Id = trait.Id,
-                    Name = trait.Name,
-                    Details = trait.Details ?? null,
-                    Value = trait.Value ?? null,
-                    Level = trait.Level ?? null,
-                    TraitGroupId = trait.TraitGroupId ?? 0
-                });
-            }
-        }
-        return listToReturn;
-    }
+    //     if (traitList != null)
+    //     {
+    //         foreach (Trait trait in traitList)
+    //         {
+    //             listToReturn.Add(new TraitDto
+    //             {
+    //                 Id = trait.Id,
+    //                 Name = trait.Name,
+    //                 Details = trait.Details ?? null,
+    //                 Value = trait.Value ?? null,
+    //                 Level = trait.Level ?? null,
+    //                 TraitGroupId = trait.TraitGroupId ?? 0
+    //             });
+    //         }
+    //     }
+    //     return listToReturn;
+    // }
 
     // public CharacterDto MapCharacter(Character character)
     // {
