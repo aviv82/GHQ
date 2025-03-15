@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GHQ.Data.Migrations
 {
     [DbContext(typeof(GHQContext))]
-    [Migration("20250312222022_Initial")]
+    [Migration("20250315210225_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -167,6 +167,44 @@ namespace GHQ.Data.Migrations
                     b.ToTable("PlayerGames", "dbo");
                 });
 
+            modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TraitGroupName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("TraitGroups", "dbo");
+                });
+
             modelBuilder.Entity("GHQ.Data.Entities.Character", b =>
                 {
                     b.HasOne("GHQ.Data.Entities.Game", "Game")
@@ -208,6 +246,20 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Game");
 
                     b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>
+                {
+                    b.HasOne("GHQ.Data.Entities.Character", "Character")
+                        .WithMany("TraitGroups")
+                        .HasForeignKey("CharacterId");
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("GHQ.Data.Entities.Character", b =>
+                {
+                    b.Navigation("TraitGroups");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>

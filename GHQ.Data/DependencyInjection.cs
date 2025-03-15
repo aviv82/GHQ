@@ -20,12 +20,10 @@ public static class DependencyInjection
         services.AddScoped<IGameService, GameService>();
         services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<ICharacterService, CharacterService>();
+        services.AddScoped<ITraitGroupService, TraitGroupService>();
 
         // services.AddScoped<IRollService, RollService>();
         // services.AddScoped<ITraitService, TraitService>();
-        // services.AddScoped<ITraitGroupService, TraitGroupService>();
-
-        // services.AddScoped<IDiceService, DiceService>();
 
         return services;
     }

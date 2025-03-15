@@ -11,17 +11,15 @@ builder.Services.AddCoreServices()
                 .AddMonitorAPI(configuration)
                 .AddLogging();
 
-var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddJsonFile("appsettings.Development.json");
 }
 
-connection = builder.Configuration.GetConnectionString(GHQ.Common.Constants.ConnectionStrings.GHQDataBaseConnectionString) ?? "";
+var connection = builder.Configuration.GetConnectionString(GHQ.Common.Constants.ConnectionStrings.GHQDataBaseConnectionString) ?? string.Empty;
 
 AddGHQDataAccess(builder.Services, connection);
 RegisterApplicationDependencies(builder.Services);
-// Add services to the container.
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

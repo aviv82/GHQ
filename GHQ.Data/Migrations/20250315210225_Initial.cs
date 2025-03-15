@@ -117,6 +117,31 @@ namespace GHQ.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TraitGroups",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TraitGroupName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: true),
+                    CharacterId = table.Column<int>(type: "int", nullable: true),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TraitGroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TraitGroups_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalSchema: "dbo",
+                        principalTable: "Characters",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Characters_GameId",
                 schema: "dbo",
@@ -153,17 +178,27 @@ namespace GHQ.Data.Migrations
                 table: "PlayerGames",
                 columns: new[] { "PlayerId", "GameId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TraitGroups_CharacterId",
+                schema: "dbo",
+                table: "TraitGroups",
+                column: "CharacterId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Characters",
+                name: "PlayerGames",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "PlayerGames",
+                name: "TraitGroups",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Characters",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
