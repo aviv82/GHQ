@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GHQ.Data.Migrations
 {
     [DbContext(typeof(GHQContext))]
-    [Migration("20250315210225_Initial")]
+    [Migration("20250316213801_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -167,6 +167,51 @@ namespace GHQ.Data.Migrations
                     b.ToTable("PlayerGames", "dbo");
                 });
 
+            modelBuilder.Entity("GHQ.Data.Entities.Trait", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("TraitGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Value")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraitGroupId");
+
+                    b.ToTable("Traits", "dbo");
+                });
+
             modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -248,6 +293,15 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Player");
                 });
 
+            modelBuilder.Entity("GHQ.Data.Entities.Trait", b =>
+                {
+                    b.HasOne("GHQ.Data.Entities.TraitGroup", "TraitGroup")
+                        .WithMany("Traits")
+                        .HasForeignKey("TraitGroupId");
+
+                    b.Navigation("TraitGroup");
+                });
+
             modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>
                 {
                     b.HasOne("GHQ.Data.Entities.Character", "Character")
@@ -272,6 +326,11 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("DmGames");
+                });
+
+            modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>
+                {
+                    b.Navigation("Traits");
                 });
 #pragma warning restore 612, 618
         }

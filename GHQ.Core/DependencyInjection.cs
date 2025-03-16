@@ -26,9 +26,9 @@ public static class DependencyInjection
              .AddScoped<IGameHandler, GameHandler>()
              .AddScoped<ICharacterHandler, CharacterHandler>()
              .AddScoped<ITraitGroupHandler, TraitGroupHandler>()
+             .AddScoped<ITraitHandler, TraitHandler>()
 
              //  .AddScoped<IRollHandler, RollHandler>()
-             //  .AddScoped<ITraitHandler, TraitHandler>()
 
              .AddValidatorsFromAssembly(applicationAssembly);
 

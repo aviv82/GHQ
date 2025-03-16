@@ -142,6 +142,33 @@ namespace GHQ.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Traits",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Value = table.Column<int>(type: "int", nullable: true),
+                    Level = table.Column<int>(type: "int", nullable: true),
+                    TraitGroupId = table.Column<int>(type: "int", nullable: true),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Traits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Traits_TraitGroups_TraitGroupId",
+                        column: x => x.TraitGroupId,
+                        principalSchema: "dbo",
+                        principalTable: "TraitGroups",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Characters_GameId",
                 schema: "dbo",
@@ -184,6 +211,12 @@ namespace GHQ.Data.Migrations
                 schema: "dbo",
                 table: "TraitGroups",
                 column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Traits_TraitGroupId",
+                schema: "dbo",
+                table: "Traits",
+                column: "TraitGroupId");
         }
 
         /// <inheritdoc />
@@ -191,6 +224,10 @@ namespace GHQ.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PlayerGames",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Traits",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

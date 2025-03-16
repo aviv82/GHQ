@@ -9,9 +9,13 @@ namespace GHQ.Data.EntityServices.Services;
 public class TraitGroupService : BaseService<TraitGroup>, ITraitGroupService
 {
     private readonly IGHQContext _context;
-    public TraitGroupService(IGHQContext context) : base(context)
+    private readonly ITraitService _traitService;
+    public TraitGroupService(
+        IGHQContext context,
+        ITraitService traitService) : base(context)
     {
         _context = context;
+        _traitService = traitService;
     }
 
     public async Task DeleteNullCharacterTraitGroupsAsync(CancellationToken cancellationToken)
@@ -31,14 +35,16 @@ public class TraitGroupService : BaseService<TraitGroup>, ITraitGroupService
         var traitGroup = await _context.TraitGroups
         .Where(x => x.Id == id)
         .Include(x => x.Character)
-        // .Include(x => x.Traits)
+        .Include(x => x.Traits)
         .FirstAsync(cancellationToken);
 
-        // foreach (var trait in traitGroup.Traits)
-        // {
-        //     _context.Traits.Remove(trait);
-        //     await _context.SaveChangesAsync(cancellationToken);
-        // }
+        foreach (var trait in traitGroup.Traits)
+        {
+            trait.TraitGroupId = null;
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+
+        await _traitService.DeleteNullTraitGroupTraitsAsync(cancellationToken);
 
         traitGroup.CharacterId = null;
         await _context.SaveChangesAsync(cancellationToken);
