@@ -11,23 +11,28 @@ public class UpdateGameValidator : AbstractValidator<UpdateGameRequest>
     public UpdateGameValidator(IGHQContext context)
     {
         RuleFor(x => x.Id)
-        .ValidateExistence<UpdateGameRequest, Game>(context)
-        .WithMessage("Game Id does not appear in the game records");
+            .ValidateExistence<UpdateGameRequest, Game>(context)
+            .WithMessage("Game Id does not appear in the game records");
 
-        RuleFor(x => x.Title).MaximumLength(100).NotEmpty().WithMessage("Invalid Game Title");
-        RuleFor(x => x.Title).Must(x => !context.Games.Any(y => y.Title == x))
-         .WithMessage("The game title you provided already exists in the registry");
+        RuleFor(x => x.Title)
+            .MaximumLength(100)
+            .NotEmpty()
+            .WithMessage("Invalid Game Title");
+        RuleFor(x => x)
+            .Must(x => !context.Games
+                .Any(y => y.Title == x.Title && y.Id != x.Id))
+            .WithMessage("The game title you provided already exists in the registry");
 
         When(x => x.DmId.HasValue && x.DmId != null, () =>
         {
             RuleFor(x => x.DmId ?? 0)
-            .ValidateExistence<UpdateGameRequest, Player>(context)
-            .WithMessage("Game's Dm Id does not appear in the player records");
+                .ValidateExistence<UpdateGameRequest, Player>(context)
+                .WithMessage("Game's Dm Id does not appear in the player records");
         });
 
         RuleForEach(x => x.Players)
-        .Must(p => context.Players
-        .Any(cp => cp.Id == p.Id))
-        .WithMessage("Game's Player Id does not appear in the player records");
+            .Must(p => context.Players
+            .Any(cp => cp.Id == p.Id))
+            .WithMessage("Game's Player Id does not appear in the player records");
     }
 }

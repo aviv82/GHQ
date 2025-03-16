@@ -8,31 +8,18 @@ namespace GHQ.Data.EntityServices.Services;
 public class CharacterService : BaseService<Character>, ICharacterService
 {
     private readonly IGHQContext _context;
-    // private readonly ITraitGroupService _traitGroupService;
-    public CharacterService(IGHQContext context
-    // ITraitGroupService traitGroupService
+    private readonly ITraitGroupService _traitGroupService;
+    public CharacterService(IGHQContext context,
+    ITraitGroupService traitGroupService
     ) : base(context)
     {
         _context = context;
-        // _traitGroupService = traitGroupService;
+        _traitGroupService = traitGroupService;
     }
 
     public async Task<Character> GetCharacterByIdIncludingPlayerAndGame(int id, CancellationToken cancellationToken)
     {
         return await _context.Characters.Where(x => x.Id == id).Include(x => x.Player).Include(x => x.Game).FirstAsync(cancellationToken);
-    }
-
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
-    {
-        var character = await _context.Characters.Where(x => x.Id == id).SingleOrDefaultAsync(cancellationToken);
-
-        if (character != null)
-        {
-            _context.Characters.Remove(character);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        return;
     }
 
     public async Task DeleteNullGameCharactersAsync(CancellationToken cancellationToken)
@@ -65,8 +52,7 @@ public class CharacterService : BaseService<Character>, ICharacterService
             traitGroup.CharacterId = null;
         }
         await _context.SaveChangesAsync(cancellationToken);
-
-        // await _traitGroupService.DeleteCascadeAsync(traitGroup.Id, cancellationToken);
+        await _traitGroupService.DeleteNullCharacterTraitGroupsAsync(cancellationToken);
 
         character.GameId = null;
         character.PlayerId = null;

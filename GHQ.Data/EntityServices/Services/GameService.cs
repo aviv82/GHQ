@@ -29,19 +29,6 @@ public class GameService : BaseService<Game>, IGameService
         .FirstAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
-    {
-        var game = await _context.Games.Where(x => x.Id == id).SingleOrDefaultAsync();
-
-        if (game != null)
-        {
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        return;
-    }
-
     public async Task DeleteNullDmGamesAsync(CancellationToken cancellationToken)
     {
         var games = await _context.Games
@@ -72,7 +59,6 @@ public class GameService : BaseService<Game>, IGameService
         await _context.SaveChangesAsync(cancellationToken);
         await _characterService.DeleteNullGameCharactersAsync(cancellationToken);
 
-        // await _characterService.DeleteCascadeAsync(character.Id, cancellationToken);
         game.Characters = [];
         game.Players = [];
         await _context.SaveChangesAsync(cancellationToken);

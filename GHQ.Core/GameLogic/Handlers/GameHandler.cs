@@ -16,18 +16,15 @@ public class GameHandler : IGameHandler
     private readonly IMapper _mapper;
     private readonly IGameService _gameService;
     private readonly IPlayerService _playerService;
-    private readonly ICharacterService _characterService;
 
     public GameHandler(
         IMapper mapper,
         IGameService gameService,
-        ICharacterService characterService,
         IPlayerService playerService)
     {
         _mapper = mapper;
         _gameService = gameService;
         _playerService = playerService;
-        _characterService = characterService;
     }
 
     public async Task<GameListVm> GetAllGames(
@@ -80,7 +77,7 @@ public class GameHandler : IGameHandler
                 Type = request.Type,
                 DmId = request.DmId,
                 Dm = new Player(),
-                Players = new List<Player>(),
+                Players = [],
             };
 
             Player dm = await _playerService.GetByIdAsync(request.DmId, cancellationToken) ?? new Player();

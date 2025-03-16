@@ -14,6 +14,18 @@ public class TraitGroupService : BaseService<TraitGroup>, ITraitGroupService
         _context = context;
     }
 
+    public async Task DeleteNullCharacterTraitGroupsAsync(CancellationToken cancellationToken)
+    {
+        var traitGroups = await _context.TraitGroups
+        .Where(x => x.CharacterId == null)
+        .ToListAsync(cancellationToken);
+
+        foreach (var traitGroup in traitGroups)
+        {
+            await DeleteCascadeAsync(traitGroup.Id, cancellationToken);
+        }
+    }
+
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         var traitGroup = await _context.TraitGroups

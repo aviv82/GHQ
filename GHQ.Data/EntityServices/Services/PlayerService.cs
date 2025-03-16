@@ -22,19 +22,6 @@ public class PlayerService : BaseService<Player>, IPlayerService
     {
         return await _context.Players.Where(x => x.Id == id).Include(x => x.DmGames).Include(x => x.PlayerGames).Include(x => x.Characters).FirstAsync(cancellationToken);
     }
-
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
-    {
-        var player = await _context.Players.Where(x => x.Id == id).SingleOrDefaultAsync(cancellationToken);
-
-        if (player != null)
-        {
-            _context.Players.Remove(player);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        return;
-    }
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         Player player = await GetPlayerByIdIncludingGamesAndCharacters(id, cancellationToken);

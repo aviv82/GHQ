@@ -1,5 +1,4 @@
 using GHQ.Common.Enums;
-using GHQ.Core.DiceLogic.Models;
 
 namespace GHQ.Core.RollLogic.Requests;
 

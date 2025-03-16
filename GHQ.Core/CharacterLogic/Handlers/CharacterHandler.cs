@@ -76,7 +76,7 @@ public class CharacterHandler : ICharacterHandler
             Character characterToAdd = new Character
             {
                 Name = request.Name,
-                Image = request.Image ?? "",
+                Image = request.Image,
                 GameId = request.GameId,
                 Game = new Game(),
                 PlayerId = request.PlayerId,
