@@ -41,32 +41,28 @@ public class CharacterListVm : PaginationMetaData
                 , ops => ops.MapFrom(src => MapPlayer(src.Player)));
         }
 
-        public PlayerDto MapPlayer(Player player)
+        public PlayerDto? MapPlayer(Player player)
         {
-            PlayerDto playerToReturn = new PlayerDto();
+            if (player == null) return null;
 
-            if (player != null)
+            return new PlayerDto
             {
-                playerToReturn.Id = player.Id;
-                playerToReturn.UserName = player.UserName;
-                playerToReturn.Email = player.Email;
-            }
-            return playerToReturn;
+                Id = player.Id,
+                UserName = player.UserName,
+                Email = player.Email
+            };
         }
 
-        public GameDto MapGame(Game game)
+        public GameDto? MapGame(Game game)
         {
-            GameDto gameToReturn = new GameDto();
-
-            if (game != null)
+            if (game == null) return null;
+            return new GameDto
             {
-                gameToReturn.Id = game.Id;
-                gameToReturn.Title = game.Title;
-                gameToReturn.Type = game.Type;
-                gameToReturn.DmId = game.DmId;
-                gameToReturn.Dm = MapPlayer(game.Dm);
-            }
-            return gameToReturn;
+                Id = game.Id,
+                Title = game.Title,
+                Type = game.Type,
+                DmId = game.DmId,
+            };
         }
     }
 }

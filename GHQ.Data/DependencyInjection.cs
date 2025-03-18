@@ -17,13 +17,12 @@ public static class DependencyInjection
 
         services.AddScoped<IGHQContext>(provider => provider.GetService<GHQContext>()!);
 
+        services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<IGameService, GameService>();
         services.AddScoped<IPlayerService, PlayerService>();
-        services.AddScoped<ICharacterService, CharacterService>();
+        services.AddScoped<IRollService, RollService>();
         services.AddScoped<ITraitGroupService, TraitGroupService>();
         services.AddScoped<ITraitService, TraitService>();
-
-        // services.AddScoped<IRollService, RollService>();
 
         return services;
     }

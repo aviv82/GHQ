@@ -76,13 +76,14 @@ public class GameHandler : IGameHandler
                 Title = request.Title,
                 Type = request.Type,
                 DmId = request.DmId,
-                Dm = new Player(),
-                Players = [],
             };
 
-            Player dm = await _playerService.GetByIdAsync(request.DmId, cancellationToken) ?? new Player();
+            var dm = await _playerService.GetByIdAsync(request.DmId, cancellationToken);
+            if (dm != null)
+            {
+                gameToAdd.Dm = dm;
+            }
 
-            gameToAdd.Dm = dm;
             Game newGame = await _gameService.InsertAsync(gameToAdd, cancellationToken);
 
             List<Game> gameAsQueryable = new List<Game> { newGame };

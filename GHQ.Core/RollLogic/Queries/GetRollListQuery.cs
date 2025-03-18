@@ -29,17 +29,21 @@ public class GetRollListQuery : QueryBase, IQueryWithSorting, IQueryWithPaginati
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Title))
                                 => NameOf<Roll>.Full(m => m.Title),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Description))
-                                => NameOf<Roll>.Full(m => m.Description ?? ""),
+                                => NameOf<Roll>.Full(m => m.Description),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Difficulty))
-                                => NameOf<Roll>.Full(m => m.Difficulty ?? 0),
+                                => NameOf<Roll>.Full(m => m.Difficulty),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.GameId))
                                 => NameOf<Roll>.Full(m => m.GameId),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Game))
                                 => NameOf<Roll>.Full(m => m.Game),
+                        { } s when NameEquals(s, nameof(RollListVm.RollDto.PlayerId))
+                                => NameOf<Roll>.Full(m => m.PlayerId),
+                        { } s when NameEquals(s, nameof(RollListVm.RollDto.Player))
+                                => NameOf<Roll>.Full(m => m.Player),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.CharacterId))
-                                => NameOf<Roll>.Full(m => m.CharacterId ?? 0),
+                                => NameOf<Roll>.Full(m => m.CharacterId),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Character))
-                                => NameOf<Roll>.Full(m => m.Character ?? new Character()),
+                                => NameOf<Roll>.Full(m => m.Character),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.DicePool))
                                 => NameOf<Roll>.Full(m => m.DicePool),
                         { } s when NameEquals(s, nameof(RollListVm.RollDto.Result))

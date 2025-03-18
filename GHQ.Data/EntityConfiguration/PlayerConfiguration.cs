@@ -34,5 +34,8 @@ public class PlayerConfiguration : BaseEntityConfiguration<Player>
             .WithOne(e => e.Player)
             .HasForeignKey(e => e.PlayerId);
 
+        builder.HasMany(e => e.Rolls)
+            .WithOne(e => e.Player)
+            .HasForeignKey(e => e.PlayerId);
     }
 }

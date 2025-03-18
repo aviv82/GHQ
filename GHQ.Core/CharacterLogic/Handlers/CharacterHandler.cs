@@ -72,15 +72,12 @@ public class CharacterHandler : ICharacterHandler
     {
         try
         {
-
             Character characterToAdd = new Character
             {
                 Name = request.Name,
                 Image = request.Image,
                 GameId = request.GameId,
-                Game = new Game(),
                 PlayerId = request.PlayerId,
-                Player = new Player(),
             };
 
             Player player = await _playerService.GetByIdAsync(request.PlayerId, cancellationToken) ?? new Player();
@@ -88,7 +85,6 @@ public class CharacterHandler : ICharacterHandler
 
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             characterToAdd.Game = game;
-
 
             Character newCharacter = await _characterService.InsertAsync(characterToAdd, cancellationToken);
 

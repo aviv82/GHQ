@@ -43,7 +43,6 @@ public class TraitGroupService : BaseService<TraitGroup>, ITraitGroupService
             trait.TraitGroupId = null;
         }
         await _context.SaveChangesAsync(cancellationToken);
-
         await _traitService.DeleteNullTraitGroupTraitsAsync(cancellationToken);
 
         traitGroup.CharacterId = null;

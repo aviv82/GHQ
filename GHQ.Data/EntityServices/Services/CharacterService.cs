@@ -39,13 +39,14 @@ public class CharacterService : BaseService<Character>, ICharacterService
         var character = await _context.Characters
         .Where(x => x.Id == id)
         .Include(x => x.TraitGroups)
-        // .Include(x => x.Rolls)
+        .Include(x => x.Rolls)
         .FirstAsync(cancellationToken);
 
-        // foreach (var roll in character.Rolls)
-        // {
-        //     _context.Rolls.Remove(roll);
-        // }
+        foreach (var roll in character.Rolls)
+        {
+            roll.CharacterId = null;
+        }
+        await _context.SaveChangesAsync(cancellationToken);
 
         foreach (var traitGroup in character.TraitGroups)
         {
@@ -56,6 +57,7 @@ public class CharacterService : BaseService<Character>, ICharacterService
 
         character.GameId = null;
         character.PlayerId = null;
+        character.Rolls = [];
         await _context.SaveChangesAsync(cancellationToken);
 
         _context.Characters.Remove(character);

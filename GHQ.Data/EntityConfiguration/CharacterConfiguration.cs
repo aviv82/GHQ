@@ -31,8 +31,8 @@ public class CharacterConfiguration : BaseEntityConfiguration<Character>
             .WithOne(e => e.Character)
             .HasForeignKey(e => e.CharacterId);
 
-        // builder.HasMany(e => e.Rolls)
-        //     .WithOne(e => e.Character)
-        //     .HasForeignKey(e => e.CharacterId);
+        builder.HasMany(e => e.Rolls)
+            .WithOne(e => e.Character)
+            .HasForeignKey(e => e.CharacterId);
     }
 }

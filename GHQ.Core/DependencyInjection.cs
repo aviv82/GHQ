@@ -22,15 +22,14 @@ public static class DependencyInjection
         var applicationAssembly = typeof(DependencyInjection).Assembly;
 
         services
-             .AddScoped<IPlayerHandler, PlayerHandler>()
-             .AddScoped<IGameHandler, GameHandler>()
-             .AddScoped<ICharacterHandler, CharacterHandler>()
-             .AddScoped<ITraitGroupHandler, TraitGroupHandler>()
-             .AddScoped<ITraitHandler, TraitHandler>()
+            .AddScoped<ICharacterHandler, CharacterHandler>()
+            .AddScoped<IGameHandler, GameHandler>()
+            .AddScoped<IPlayerHandler, PlayerHandler>()
+            .AddScoped<IRollHandler, RollHandler>()
+            .AddScoped<ITraitGroupHandler, TraitGroupHandler>()
+            .AddScoped<ITraitHandler, TraitHandler>()
 
-             //  .AddScoped<IRollHandler, RollHandler>()
-
-             .AddValidatorsFromAssembly(applicationAssembly);
+            .AddValidatorsFromAssembly(applicationAssembly);
 
         return services;
     }

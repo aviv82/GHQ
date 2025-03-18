@@ -16,14 +16,16 @@ public class RollListVm : PaginationMetaData
     public class RollDto : IMapFrom<Roll>
     {
         public int Id { get; set; }
-        public string Title { get; set; } = default!;
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Difficulty { get; set; }
         public int GameId { get; set; }
-        public GameDto Game { get; set; } = new GameDto();
-        public int CharacterId { get; set; }
-        public CharacterDto Character { get; set; } = new CharacterDto();
-        public List<DiceType> DicePool { get; set; } = [];
+        public GameDto Game { get; set; } = default!;
+        public int? PlayerId { get; set; }
+        public PlayerDto? Player { get; set; }
+        public int? CharacterId { get; set; }
+        public CharacterDto? Character { get; set; }
+        public List<int> DicePool { get; set; } = [];
         public List<int> Result { get; set; } = [];
 
         public void Mapping(Profile profile)
@@ -41,71 +43,53 @@ public class RollListVm : PaginationMetaData
                 , ops => ops.MapFrom(src => src.GameId))
             .ForMember(dest => dest.Game
                 , ops => ops.MapFrom(src => MapGame(src.Game)))
+            .ForMember(dest => dest.PlayerId
+                , ops => ops.MapFrom(src => src.PlayerId))
+            .ForMember(dest => dest.Player
+                , ops => ops.MapFrom(src => MapPlayer(src.Player)))
             .ForMember(dest => dest.CharacterId
                 , ops => ops.MapFrom(src => src.CharacterId))
             .ForMember(dest => dest.Character
-                , ops => ops.MapFrom(src => MapCharacter(src.Character ?? new Character())))
+                , ops => ops.MapFrom(src => MapCharacter(src.Character)))
             .ForMember(dest => dest.DicePool
-                , ops => ops.MapFrom(src => MapDicePool(src.DicePool)))
+                , ops => ops.MapFrom(src => src.DicePool.ToList()))
             .ForMember(dest => dest.Result
                 , ops => ops.MapFrom(src => src.Result.ToList()));
         }
 
-        public List<DiceType> MapDicePool(List<DiceType> dicePool)
+        public CharacterDto? MapCharacter(Character character)
         {
-            List<DiceType> toReturn = [];
-            if (dicePool != null)
+            if (character == null) return null;
+            return new CharacterDto
             {
-                foreach (var dice in dicePool)
-                {
-                    toReturn.Add(dice);
-                }
-            }
-            return toReturn;
+                Id = character.Id,
+                Name = character.Name,
+                GameId = character.GameId,
+                PlayerId = character.PlayerId,
+                Image = character.Image
+            };
         }
 
-        public CharacterDto MapCharacter(Character character)
+        public GameDto? MapGame(Game game)
         {
-            CharacterDto characterToReturn = new CharacterDto();
-
-            if (character != null)
+            if (game == null) return null;
+            return new GameDto
             {
-                {
-                    characterToReturn.Id = character.Id;
-                    characterToReturn.Name = character.Name;
-                    characterToReturn.GameId = character.GameId;
-                    characterToReturn.PlayerId = character.PlayerId;
-                    characterToReturn.Image = character.Image ?? string.Empty;
-                }
-            }
-            return characterToReturn;
+                Id = game.Id,
+                Title = game.Title,
+                Type = game.Type,
+                DmId = game.DmId,
+            };
         }
-
-        public GameDto MapGame(Game game)
+        public PlayerDto? MapPlayer(Player player)
         {
-            GameDto gameToReturn = new GameDto();
-
-            if (game != null)
+            if (player == null) return null;
+            return new PlayerDto
             {
-                gameToReturn.Id = game.Id;
-                gameToReturn.Title = game.Title;
-                gameToReturn.Type = game.Type;
-                gameToReturn.DmId = game.DmId ?? 0;
-                gameToReturn.Dm = MapPlayer(game.Dm);
-            }
-            return gameToReturn;
-        }
-        public PlayerDto MapPlayer(Player player)
-        {
-            PlayerDto playerToReturn = new PlayerDto();
-
-            if (player != null)
-            {
-                playerToReturn.Id = player.Id;
-                playerToReturn.UserName = player.UserName;
-                playerToReturn.Email = player.Email ?? "";
-            }
-            return playerToReturn;
+                Id = player.Id,
+                UserName = player.UserName,
+                Email = player.Email
+            };
         }
     }
 }

@@ -27,8 +27,8 @@ public class TraitService : BaseService<Trait>, ITraitService
     public virtual async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
         var trait = await _context.Traits
-        .Where(x => x.Id == id)
-        .FirstAsync(cancellationToken);
+            .Where(x => x.Id == id)
+            .FirstAsync(cancellationToken);
 
         trait.TraitGroupId = null;
         await _context.SaveChangesAsync(cancellationToken);

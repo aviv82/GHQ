@@ -71,8 +71,6 @@ public class PlayerHandler : IPlayerHandler
                 UserName = request.UserName,
                 Email = request.Email ?? string.Empty,
                 PasswordHash = request.PasswordHash ?? string.Empty,
-                DmGames = [],
-                PlayerGames = [],
             };
 
             Player newPlayer = await _playerService.InsertAsync(playerToAdd, cancellationToken);

@@ -33,11 +33,11 @@ public class GetCharacterListQuery : QueryBase, IQueryWithSorting, IQueryWithPag
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.GameId))
                                 => NameOf<Character>.Full(m => m.GameId),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Game))
-                                => NameOf<Character>.Full(m => m.Game ?? new Game()),
+                                => NameOf<Character>.Full(m => m.Game),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.PlayerId))
                                 => NameOf<Character>.Full(m => m.PlayerId),
                         { } s when NameEquals(s, nameof(CharacterListVm.CharacterDto.Player))
-                                => NameOf<Character>.Full(m => m.Player ?? new Player()),
+                                => NameOf<Character>.Full(m => m.Player),
                         { } s when typeof(Character).GetProperties().Any(x => NameEquals(x.Name, name))
                                 => name,
                         _ => string.Empty

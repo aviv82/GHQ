@@ -164,6 +164,65 @@ namespace GHQ.Data.Migrations
                     b.ToTable("PlayerGames", "dbo");
                 });
 
+            modelBuilder.Entity("GHQ.Data.Entities.Roll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("DicePool")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Rolls", "dbo");
+                });
+
             modelBuilder.Entity("GHQ.Data.Entities.Trait", b =>
                 {
                     b.Property<int>("Id")
@@ -290,6 +349,27 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Player");
                 });
 
+            modelBuilder.Entity("GHQ.Data.Entities.Roll", b =>
+                {
+                    b.HasOne("GHQ.Data.Entities.Character", "Character")
+                        .WithMany("Rolls")
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("GHQ.Data.Entities.Game", "Game")
+                        .WithMany("Rolls")
+                        .HasForeignKey("GameId");
+
+                    b.HasOne("GHQ.Data.Entities.Player", "Player")
+                        .WithMany("Rolls")
+                        .HasForeignKey("PlayerId");
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("GHQ.Data.Entities.Trait", b =>
                 {
                     b.HasOne("GHQ.Data.Entities.TraitGroup", "TraitGroup")
@@ -310,12 +390,16 @@ namespace GHQ.Data.Migrations
 
             modelBuilder.Entity("GHQ.Data.Entities.Character", b =>
                 {
+                    b.Navigation("Rolls");
+
                     b.Navigation("TraitGroups");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>
                 {
                     b.Navigation("Characters");
+
+                    b.Navigation("Rolls");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.Player", b =>
@@ -323,6 +407,8 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("DmGames");
+
+                    b.Navigation("Rolls");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>

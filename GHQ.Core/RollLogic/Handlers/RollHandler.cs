@@ -20,20 +20,20 @@ public class RollHandler : IRollHandler
     private readonly IRollService _rollService;
     private readonly ICharacterService _characterService;
     private readonly IGameService _gameService;
-    // private readonly IDiceService _diceService;
+    private readonly IPlayerService _playerService;
     public RollHandler(
         IMapper mapper,
         IRollService rollService,
         ICharacterService characterService,
-        IGameService gameService
-        // IDiceService diceService
+        IGameService gameService,
+        IPlayerService playerService
         )
     {
         _mapper = mapper;
         _rollService = rollService;
         _characterService = characterService;
         _gameService = gameService;
-        // _diceService = diceService;
+        _playerService = playerService;
     }
     public async Task<RollListVm> GetAllRolls(
         GetRollListQuery request,
@@ -81,23 +81,37 @@ public class RollHandler : IRollHandler
             Roll rollToAdd = new Roll
             {
                 Title = request.Title,
-                Description = request.Description ?? "",
-                Difficulty = request.Difficulty ?? 0,
+                Description = request.Description,
+                Difficulty = request.Difficulty,
                 GameId = request.GameId,
-                Game = new Game(),
                 CharacterId = request.CharacterId,
-                Character = new Character(),
-                DicePool = [],
-                Result = []
             };
 
-            Character character = await _characterService.GetByIdAsync(request.CharacterId, cancellationToken) ?? new Character();
-            rollToAdd.Character = character;
+            if (request.CharacterId != null)
+            {
+                var character = await _characterService.GetByIdAsync((int)request.CharacterId, cancellationToken);
+                if (character != null)
+                    rollToAdd.Character = character;
+            }
 
-            Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
-            rollToAdd.Game = game;
+            if (rollToAdd.Character == null && request.PlayerId != null)
+            {
+                var player = await _playerService.GetByIdAsync((int)request.PlayerId, cancellationToken);
 
-            List<DiceType> dicePoolToAdd = [];
+                if (player != null)
+                {
+                    rollToAdd.PlayerId = request.PlayerId;
+                    rollToAdd.Player = player;
+                }
+            }
+
+            if (request.GameId != 0)
+            {
+                var game = await _gameService.GetByIdAsync(request.GameId, cancellationToken);
+                rollToAdd.Game = game;
+            }
+
+            List<int> dicePoolToAdd = [];
 
             if (request.DicePool != null)
             {
@@ -110,17 +124,6 @@ public class RollHandler : IRollHandler
             rollToAdd.DicePool = dicePoolToAdd;
 
             rollToAdd.Result = DiceRollerExtensions.DicePoolRoller(rollToAdd.DicePool);
-
-            // foreach (var dice in request.DicePool)
-            // {
-            //     var diceToAdd = await _diceService.GetDiceByValueAsync(dice, cancellationToken);
-            //     if (diceToAdd != null)
-            //     {
-            //         rollToAdd.DicePool.Add(
-            //            diceToAdd
-            //         );
-            //     }
-            // }
 
             Roll newRoll = await _rollService.InsertAsync(rollToAdd, cancellationToken);
 
@@ -144,7 +147,7 @@ public class RollHandler : IRollHandler
             if (roll == null) { throw new Exception("Roll not found"); }
             ;
 
-            await _rollService.DeleteAsync(roll, cancellationToken);
+            await _rollService.DeleteCascadeAsync(roll.Id, cancellationToken);
         }
         catch (Exception ex)
         {

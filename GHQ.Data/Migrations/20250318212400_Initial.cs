@@ -118,6 +118,48 @@ namespace GHQ.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rolls",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Difficulty = table.Column<int>(type: "int", nullable: true),
+                    CharacterId = table.Column<int>(type: "int", nullable: true),
+                    PlayerId = table.Column<int>(type: "int", nullable: true),
+                    GameId = table.Column<int>(type: "int", nullable: true),
+                    DicePool = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rolls", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rolls_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalSchema: "dbo",
+                        principalTable: "Characters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Rolls_Games_GameId",
+                        column: x => x.GameId,
+                        principalSchema: "dbo",
+                        principalTable: "Games",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Rolls_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalSchema: "dbo",
+                        principalTable: "Players",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TraitGroups",
                 schema: "dbo",
                 columns: table => new
@@ -207,6 +249,24 @@ namespace GHQ.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Rolls_CharacterId",
+                schema: "dbo",
+                table: "Rolls",
+                column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rolls_GameId",
+                schema: "dbo",
+                table: "Rolls",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rolls_PlayerId",
+                schema: "dbo",
+                table: "Rolls",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TraitGroups_CharacterId",
                 schema: "dbo",
                 table: "TraitGroups",
@@ -224,6 +284,10 @@ namespace GHQ.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PlayerGames",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Rolls",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

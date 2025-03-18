@@ -20,11 +20,22 @@ public class PlayerService : BaseService<Player>, IPlayerService
 
     public virtual async Task<Player> GetPlayerByIdIncludingGamesAndCharacters(int id, CancellationToken cancellationToken)
     {
-        return await _context.Players.Where(x => x.Id == id).Include(x => x.DmGames).Include(x => x.PlayerGames).Include(x => x.Characters).FirstAsync(cancellationToken);
+        return await _context.Players
+            .Where(x => x.Id == id)
+            .Include(x => x.DmGames)
+            .Include(x => x.PlayerGames)
+            .Include(x => x.Characters)
+            .FirstAsync(cancellationToken);
     }
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
-        Player player = await GetPlayerByIdIncludingGamesAndCharacters(id, cancellationToken);
+        Player player = await _context.Players
+            .Where(x => x.Id == id)
+            .Include(x => x.DmGames)
+            .Include(x => x.PlayerGames)
+            .Include(x => x.Characters)
+            .Include(x => x.Rolls)
+            .FirstAsync(cancellationToken);
 
         foreach (var character in player.Characters)
         {
@@ -40,8 +51,15 @@ public class PlayerService : BaseService<Player>, IPlayerService
 
         await _gameService.DeleteNullDmGamesAsync(cancellationToken);
 
+        foreach (var roll in player.Rolls)
+        {
+            roll.PlayerId = null;
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+
         player.DmGames = [];
         player.PlayerGames = [];
+        player.Rolls = [];
         await _context.SaveChangesAsync(cancellationToken);
 
         _context.Players.Remove(player);

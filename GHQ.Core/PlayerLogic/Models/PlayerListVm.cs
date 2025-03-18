@@ -4,6 +4,7 @@ using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
 using static GHQ.Core.GameLogic.Models.GameListVm;
+using static GHQ.Core.RollLogic.Models.RollListVm;
 
 namespace GHQ.Core.PlayerLogic.Models;
 
@@ -39,37 +40,37 @@ public class PlayerListVm : PaginationMetaData
 
         public List<CharacterDto> MapCharacters(ICollection<Character> characters)
         {
+            if (characters == null) return [];
+
             List<CharacterDto> charactersToReturn = new List<CharacterDto>();
 
-            if (characters != null)
-            {
-                characters.ToList().ForEach(x => charactersToReturn.Add(
-                                new CharacterDto
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    GameId = x.GameId,
-                                    PlayerId = x.PlayerId,
-                                    Image = x.Image ?? string.Empty
-                                }));
-            }
+            characters.ToList().ForEach(x => charactersToReturn.Add(
+                            new CharacterDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                GameId = x.GameId,
+                                PlayerId = x.PlayerId,
+                                Image = x.Image
+                            }));
+
             return charactersToReturn;
         }
         public List<GameDto> MapGames(ICollection<Game> games)
         {
+            if (games == null) return [];
+
             List<GameDto> gamesToReturn = new List<GameDto>();
 
-            if (games != null)
-            {
-                games.ToList().ForEach(x => gamesToReturn.Add(
-                                new GameDto
-                                {
-                                    Id = x.Id,
-                                    DmId = x.DmId,
-                                    Title = x.Title,
-                                    Type = x.Type
-                                }));
-            }
+            games.ToList().ForEach(x => gamesToReturn.Add(
+                            new GameDto
+                            {
+                                Id = x.Id,
+                                DmId = x.DmId,
+                                Title = x.Title,
+                                Type = x.Type
+                            }));
+
             return gamesToReturn;
         }
     }

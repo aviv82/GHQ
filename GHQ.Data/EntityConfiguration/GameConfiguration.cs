@@ -30,8 +30,8 @@ public class GameConfiguration : BaseEntityConfiguration<Game>
             .WithOne(e => e.Game)
             .HasForeignKey(e => e.GameId);
 
-        // builder.HasMany(e => e.Rolls)
-        //     .WithOne(e => e.Game)
-        //     .HasForeignKey(e => e.GameId);
+        builder.HasMany(e => e.Rolls)
+            .WithOne(e => e.Game)
+            .HasForeignKey(e => e.GameId);
     }
 }
