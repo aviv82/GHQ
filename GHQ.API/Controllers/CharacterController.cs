@@ -110,6 +110,39 @@ public class CharacterController : Controller
     }
 
     /// <summary>
+    ///  Get Character sheet by character Id.
+    /// </summary>
+    /// <param name="request">A request object inferred from the query in the URL.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+    [HttpGet("{Id}/sheet")]
+    public async Task<ActionResult<CharacterDto>> GetCharacterSheetById(
+        [FromRoute] GetCharacterByIdQuery request,
+        CancellationToken cancellationToken = default)
+    {
+        var validationResult = await _characterByIdValidator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
+        try
+        {
+            var result = await _characterHandler.GetCharacterSheetById(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (BusinessException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return new ObjectResult(e.Message) { StatusCode = 500 };
+        }
+    }
+
+    /// <summary>
     ///  Add Character.
     /// </summary>
     /// <param name="request">A request object inferred from the body.</param>

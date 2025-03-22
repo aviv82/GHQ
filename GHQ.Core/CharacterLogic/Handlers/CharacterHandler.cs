@@ -51,6 +51,21 @@ public class CharacterHandler : ICharacterHandler
         };
     }
 
+    public async Task<CharacterDto> GetCharacterSheetById(
+       GetCharacterByIdQuery request,
+       CancellationToken cancellationToken)
+    {
+        Character? query = await _characterService.GetCharacterByIdIncludingTraitGroupsAndTraits(request.Id, cancellationToken);
+
+        if (query == null) { throw new Exception("Character not found"); }
+
+        List<Character> characterList = new List<Character> { query };
+
+        var toReturn = characterList.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider);
+
+        return toReturn.First();
+    }
+
     public async Task<CharacterDto> GetCharacterById(
        GetCharacterByIdQuery request,
        CancellationToken cancellationToken)

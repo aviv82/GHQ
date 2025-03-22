@@ -12,17 +12,17 @@ namespace GHQ.Core.TraitGroupLogic.Handlers;
 public class TraitGroupHandler : ITraitGroupHandler
 {
     private readonly ITraitGroupService _traitGroupService;
-    // private readonly ITraitService _traitService;
+    private readonly ITraitService _traitService;
     private readonly IMapper _mapper;
 
     public TraitGroupHandler(
         ITraitGroupService traitGroupService,
-        // ITraitService traitService,
+        ITraitService traitService,
         IMapper mapper
         )
     {
         _traitGroupService = traitGroupService;
-        // _traitService = traitService;
+        _traitService = traitService;
         _mapper = mapper;
     }
 
@@ -30,7 +30,7 @@ public class TraitGroupHandler : ITraitGroupHandler
     GetTraitGroupByIdQuery request,
     CancellationToken cancellationToken)
     {
-        TraitGroup? query = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
+        TraitGroup? query = await _traitGroupService.GetTraitGroupByIdIncludingTraitsAsync(request.Id, cancellationToken);
 
         if (query == null) { throw new Exception("Trait Group not found"); }
 
@@ -74,7 +74,8 @@ public class TraitGroupHandler : ITraitGroupHandler
         {
             var traitGroup = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (traitGroup == null) { throw new Exception("Trait Group not found"); };
+            if (traitGroup == null) { throw new Exception("Trait Group not found"); }
+            ;
 
             traitGroup.TraitGroupName = request.TraitGroupName;
             if (request.Type != null)
@@ -82,21 +83,22 @@ public class TraitGroupHandler : ITraitGroupHandler
                 traitGroup.Type = request.Type;
             }
 
-            // if (traitGroup.Traits != request.Traits && request.Traits != null)
-            // {
-            //     traitGroup.Traits = [];
+            if (traitGroup.Traits != request.Traits && request.Traits != null)
+            {
+                traitGroup.Traits = [];
 
-            //     List<Trait> traits = await _traitService.GetAllAsync(cancellationToken);
+                List<Trait> traits = await _traitService.GetAllAsync(cancellationToken);
 
-            //     foreach (TraitDto trait in request.Traits)
-            //     {
-            //         Trait? listTrait = traits.FirstOrDefault(x => x.Id == trait.Id);
+                foreach (TraitDto trait in request.Traits)
+                {
+                    Trait? listTrait = traits.FirstOrDefault(x => x.Id == trait.Id);
 
-            //         if (listTrait == null) { throw new Exception("Trait Group Trait not found"); };
+                    if (listTrait == null) { throw new Exception("Trait Group Trait not found"); }
+                    ;
 
-            //         traitGroup.Traits.Add(listTrait);
-            //     }
-            // }
+                    traitGroup.Traits.Add(listTrait);
+                }
+            }
 
             await _traitGroupService.UpdateAsync(traitGroup, cancellationToken);
             return _mapper.Map<TraitGroupDto>(traitGroup);
@@ -115,7 +117,8 @@ public class TraitGroupHandler : ITraitGroupHandler
         {
             var traitGroup = await _traitGroupService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (traitGroup == null) { throw new Exception("Trait Group not found"); };
+            if (traitGroup == null) { throw new Exception("Trait Group not found"); }
+            ;
 
             await _traitGroupService.DeleteAsync(traitGroup, cancellationToken);
         }

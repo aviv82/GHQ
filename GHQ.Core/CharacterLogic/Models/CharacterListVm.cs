@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using GHQ.Common;
 using GHQ.Core.Mappings;
+using GHQ.Core.TraitGroupLogic.Models;
+using GHQ.Core.TraitLogic.Models;
 using GHQ.Data.Entities;
 using static GHQ.Core.GameLogic.Models.GameListVm;
 using static GHQ.Core.PlayerLogic.Models.PlayerListVm;
@@ -20,7 +22,7 @@ public class CharacterListVm : PaginationMetaData
         public GameDto? Game { get; set; }
         public int? PlayerId { get; set; }
         public PlayerDto? Player { get; set; }
-
+        public List<TraitGroupDto>? TraitGroups { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -38,7 +40,9 @@ public class CharacterListVm : PaginationMetaData
             .ForMember(dest => dest.PlayerId
                 , ops => ops.MapFrom(src => src.PlayerId))
             .ForMember(dest => dest.Player
-                , ops => ops.MapFrom(src => MapPlayer(src.Player)));
+                , ops => ops.MapFrom(src => MapPlayer(src.Player)))
+            .ForMember(dest => dest.TraitGroups
+                , ops => ops.MapFrom(src => MapTraitGroupList(src.TraitGroups)));
         }
 
         public PlayerDto? MapPlayer(Player player)
@@ -62,6 +66,51 @@ public class CharacterListVm : PaginationMetaData
                 Title = game.Title,
                 Type = game.Type,
                 DmId = game.DmId,
+            };
+        }
+
+        public List<TraitGroupDto>? MapTraitGroupList(ICollection<TraitGroup> traitGroupList)
+        {
+            if (traitGroupList == null) return null;
+
+            List<TraitGroupDto> traitGroupsToReturn = [];
+
+            foreach (var traitGroup in traitGroupList)
+            {
+                traitGroupsToReturn.Add(MapTraitGroup(traitGroup));
+            }
+
+            return traitGroupsToReturn;
+        }
+
+        public TraitGroupDto MapTraitGroup(TraitGroup traitGroup)
+        {
+            List<TraitDto> traits = [];
+
+            foreach (var trait in traitGroup.Traits)
+            {
+                traits.Add(MapTrait(trait));
+            }
+
+            return new TraitGroupDto
+            {
+                Id = traitGroup.Id,
+                TraitGroupName = traitGroup.TraitGroupName,
+                Type = traitGroup.Type,
+                CharacterId = traitGroup.CharacterId,
+                Traits = traits
+            };
+        }
+        public TraitDto MapTrait(Trait trait)
+        {
+            return new TraitDto
+            {
+                Id = trait.Id,
+                Details = trait.Details,
+                Name = trait.Name,
+                Level = trait.Level,
+                Value = trait.Value,
+                TraitGroupId = trait.TraitGroupId ?? 0
             };
         }
     }

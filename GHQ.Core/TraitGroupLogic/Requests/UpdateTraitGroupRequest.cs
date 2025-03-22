@@ -8,5 +8,5 @@ public class UpdateTraitGroupRequest
     public string TraitGroupName { get; set; } = default!;
     public TraitType? Type { get; set; }
 
-    // public List<TraitDto>? Traits { get; set; }
+    public List<TraitDto>? Traits { get; set; }
 }

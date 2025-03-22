@@ -17,9 +17,21 @@ public class CharacterService : BaseService<Character>, ICharacterService
         _traitGroupService = traitGroupService;
     }
 
+    public async Task<Character> GetCharacterByIdIncludingTraitGroupsAndTraits(int id, CancellationToken cancellationToken)
+    {
+        return await _context.Characters
+            .Where(x => x.Id == id)
+            .Include(x => x.TraitGroups)
+            .ThenInclude(x => x.Traits)
+            .FirstAsync(cancellationToken);
+    }
     public async Task<Character> GetCharacterByIdIncludingPlayerAndGame(int id, CancellationToken cancellationToken)
     {
-        return await _context.Characters.Where(x => x.Id == id).Include(x => x.Player).Include(x => x.Game).FirstAsync(cancellationToken);
+        return await _context.Characters
+            .Where(x => x.Id == id)
+            .Include(x => x.Player)
+            .Include(x => x.Game)
+            .FirstAsync(cancellationToken);
     }
 
     public async Task DeleteNullGameCharactersAsync(CancellationToken cancellationToken)
@@ -37,10 +49,10 @@ public class CharacterService : BaseService<Character>, ICharacterService
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         var character = await _context.Characters
-        .Where(x => x.Id == id)
-        .Include(x => x.TraitGroups)
-        .Include(x => x.Rolls)
-        .FirstAsync(cancellationToken);
+            .Where(x => x.Id == id)
+            .Include(x => x.TraitGroups)
+            .Include(x => x.Rolls)
+            .FirstAsync(cancellationToken);
 
         foreach (var roll in character.Rolls)
         {

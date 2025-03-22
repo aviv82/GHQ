@@ -30,6 +30,14 @@ public class TraitGroupService : BaseService<TraitGroup>, ITraitGroupService
         }
     }
 
+    public async Task<TraitGroup> GetTraitGroupByIdIncludingTraitsAsync(int id, CancellationToken cancellationToken)
+    {
+        return await _context.TraitGroups
+                    .Where(x => x.Id == id)
+                    .Include(x => x.Traits)
+                    .FirstAsync(cancellationToken);
+    }
+
     public virtual async Task DeleteCascadeAsync(int id, CancellationToken cancellationToken)
     {
         var traitGroup = await _context.TraitGroups
