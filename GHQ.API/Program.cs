@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetRequiredService<IConfiguration>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        );
+});
+
 builder.Services.AddControllers();
 builder.Services.AddCoreServices()
                 .AddMonitorAPI(configuration)
@@ -35,6 +45,7 @@ app.UseSwaggerUI();
 //}
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
 
