@@ -10,6 +10,8 @@ public class GetGameByIdValidator : AbstractValidator<GetGameByIdQuery>
 {
     public GetGameByIdValidator(IGHQContext context)
     {
-        RuleFor(x => x.Id).ValidateExistence<GetGameByIdQuery, Game>(context);
+        RuleFor(x => x.Id)
+        .ValidateExistence<GetGameByIdQuery, Game>(context)
+        .WithMessage("Game not found");
     }
 }

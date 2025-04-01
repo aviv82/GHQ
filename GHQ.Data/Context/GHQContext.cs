@@ -1,4 +1,5 @@
-﻿using GHQ.Data.Context.Interfaces;
+﻿using System.Security.Cryptography.X509Certificates;
+using GHQ.Data.Context.Interfaces;
 using GHQ.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,34 +11,27 @@ public class GHQContext : DbContext, IGHQContext
 
     public GHQContext(DbContextOptions<GHQContext> options) : base(options) { }
 
-    public virtual DbSet<Game> Games { get; set; }
     public virtual DbSet<Character> Characters { get; set; }
+    public virtual DbSet<Game> Games { get; set; }
     public virtual DbSet<Player> Players { get; set; }
-    public virtual DbSet<Dice> Dices { get; set; }
     public virtual DbSet<Roll> Rolls { get; set; }
     public virtual DbSet<TraitGroup> TraitGroups { get; set; }
     public virtual DbSet<Trait> Traits { get; set; }
 
     public DbSet<PlayerGame> PlayerGames { get; set; }
-    public DbSet<DiceRoll> DiceRolls { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GHQContext).Assembly);
 
         modelBuilder.Entity<PlayerGame>()
-            .HasIndex(e => e.PlayerId);
+        .HasIndex(e => e.GameId);
         modelBuilder.Entity<PlayerGame>()
-            .HasIndex(e => e.GameId);
-        modelBuilder.Entity<PlayerGame>()
-            .HasIndex(e => new { e.PlayerId, e.GameId }).IsUnique();
+        .HasIndex(e => e.PlayerId);
 
-        modelBuilder.Entity<DiceRoll>()
-        .HasIndex(e => e.DiceId);
-        modelBuilder.Entity<DiceRoll>()
-            .HasIndex(e => e.RollId);
-        modelBuilder.Entity<DiceRoll>()
-            .HasIndex(e => new { e.DiceId, e.RollId }).IsUnique();
+        modelBuilder.Entity<PlayerGame>()
+            .HasIndex(e => new { e.PlayerId, e.GameId })
+            .IsUnique();
 
         RemoveCascadeDeleteBehaviors(modelBuilder);
     }

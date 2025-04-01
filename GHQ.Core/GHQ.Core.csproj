@@ -16,4 +16,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TraitGroupLogic/" />
+    <Folder Include="TraitGroupLogic/Handlers/" />
+    <Folder Include="TraitGroupLogic/Handlers/Interfaces/" />
+    <Folder Include="TraitGroupLogic/Models/" />
+  </ItemGroup>
+
 </Project>

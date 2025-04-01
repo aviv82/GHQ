@@ -17,7 +17,7 @@ namespace GHQ.API.Controllers;
 public class CharacterController : Controller
 {
     private readonly ICharacterHandler _characterHandler;
-    private readonly ILogger<GameController> _logger;
+    private readonly ILogger<CharacterController> _logger;
     IValidator<GetCharacterByIdQuery> _characterByIdValidator;
     IValidator<AddCharacterRequest> _addValidator;
     IValidator<UpdateCharacterRequest> _updateValidator;
@@ -34,7 +34,7 @@ public class CharacterController : Controller
     /// <param name="deleteValidator">An IValidator object for delete requests.</param>
     public CharacterController(
         ICharacterHandler characterHandler,
-        ILogger<GameController> logger,
+        ILogger<CharacterController> logger,
         IValidator<GetCharacterByIdQuery> characterByIdValidator,
         IValidator<AddCharacterRequest> addValidator,
         IValidator<UpdateCharacterRequest> updateValidator,
@@ -96,6 +96,39 @@ public class CharacterController : Controller
         try
         {
             var result = await _characterHandler.GetCharacterById(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (BusinessException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return new ObjectResult(e.Message) { StatusCode = 500 };
+        }
+    }
+
+    /// <summary>
+    ///  Get Character sheet by character Id.
+    /// </summary>
+    /// <param name="request">A request object inferred from the query in the URL.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+    [HttpGet("{Id}/sheet")]
+    public async Task<ActionResult<CharacterDto>> GetCharacterSheetById(
+        [FromRoute] GetCharacterByIdQuery request,
+        CancellationToken cancellationToken = default)
+    {
+        var validationResult = await _characterByIdValidator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
+        try
+        {
+            var result = await _characterHandler.GetCharacterSheetById(request, cancellationToken);
             return Ok(result);
         }
         catch (BusinessException e)

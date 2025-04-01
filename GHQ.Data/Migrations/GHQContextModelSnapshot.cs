@@ -17,7 +17,7 @@ namespace GHQ.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,7 +33,7 @@ namespace GHQ.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameId")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -45,7 +45,7 @@ namespace GHQ.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -66,57 +66,6 @@ namespace GHQ.Data.Migrations
                     b.ToTable("Characters", "dbo");
                 });
 
-            modelBuilder.Entity("GHQ.Data.Entities.Dice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Result")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dices", "dbo");
-                });
-
-            modelBuilder.Entity("GHQ.Data.Entities.DiceRoll", b =>
-                {
-                    b.Property<int>("DiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RollId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DiceId", "RollId");
-
-                    b.HasIndex("DiceId");
-
-                    b.HasIndex("RollId");
-
-                    b.HasIndex("DiceId", "RollId")
-                        .IsUnique();
-
-                    b.ToTable("DiceRolls", "dbo");
-                });
-
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -128,7 +77,7 @@ namespace GHQ.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DmId")
+                    b.Property<int?>("DmId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -167,10 +116,12 @@ namespace GHQ.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -221,7 +172,7 @@ namespace GHQ.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharacterId")
+                    b.Property<int?>("CharacterId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -231,17 +182,24 @@ namespace GHQ.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("DicePool")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Difficulty")
                         .HasColumnType("int");
 
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Result")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -260,6 +218,8 @@ namespace GHQ.Data.Migrations
 
                     b.HasIndex("GameId");
 
+                    b.HasIndex("PlayerId");
+
                     b.ToTable("Rolls", "dbo");
                 });
 
@@ -274,6 +234,10 @@ namespace GHQ.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Details")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<int?>("Level")
                         .HasColumnType("int");
 
@@ -282,7 +246,7 @@ namespace GHQ.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("TraitGroupId")
+                    b.Property<int?>("TraitGroupId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -312,7 +276,7 @@ namespace GHQ.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharacterId")
+                    b.Property<int?>("CharacterId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -346,47 +310,22 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.Game", "Game")
                         .WithMany("Characters")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("GameId");
 
                     b.HasOne("GHQ.Data.Entities.Player", "Player")
                         .WithMany("Characters")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("PlayerId");
 
                     b.Navigation("Game");
 
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("GHQ.Data.Entities.DiceRoll", b =>
-                {
-                    b.HasOne("GHQ.Data.Entities.Dice", "Dice")
-                        .WithMany()
-                        .HasForeignKey("DiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GHQ.Data.Entities.Roll", "Roll")
-                        .WithMany()
-                        .HasForeignKey("RollId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Dice");
-
-                    b.Navigation("Roll");
-                });
-
             modelBuilder.Entity("GHQ.Data.Entities.Game", b =>
                 {
                     b.HasOne("GHQ.Data.Entities.Player", "Dm")
                         .WithMany("DmGames")
-                        .HasForeignKey("DmId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DmId");
 
                     b.Navigation("Dm");
                 });
@@ -414,28 +353,28 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.Character", "Character")
                         .WithMany("Rolls")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CharacterId");
 
                     b.HasOne("GHQ.Data.Entities.Game", "Game")
                         .WithMany("Rolls")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("GameId");
+
+                    b.HasOne("GHQ.Data.Entities.Player", "Player")
+                        .WithMany("Rolls")
+                        .HasForeignKey("PlayerId");
 
                     b.Navigation("Character");
 
                     b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.Trait", b =>
                 {
                     b.HasOne("GHQ.Data.Entities.TraitGroup", "TraitGroup")
                         .WithMany("Traits")
-                        .HasForeignKey("TraitGroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("TraitGroupId");
 
                     b.Navigation("TraitGroup");
                 });
@@ -444,9 +383,7 @@ namespace GHQ.Data.Migrations
                 {
                     b.HasOne("GHQ.Data.Entities.Character", "Character")
                         .WithMany("TraitGroups")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CharacterId");
 
                     b.Navigation("Character");
                 });
@@ -470,6 +407,8 @@ namespace GHQ.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("DmGames");
+
+                    b.Navigation("Rolls");
                 });
 
             modelBuilder.Entity("GHQ.Data.Entities.TraitGroup", b =>

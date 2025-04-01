@@ -5,22 +5,24 @@ using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
 using static GHQ.Core.PlayerLogic.Models.PlayerListVm;
+using static GHQ.Core.RollLogic.Models.RollListVm;
 
 namespace GHQ.Core.GameLogic.Models;
 
 public class GameListVm : PaginationMetaData
 {
-    public IEnumerable<GameDto> GameList { get; set; } = default!;
+    public ICollection<GameDto> GameList { get; set; } = default!;
 
     public class GameDto : IMapFrom<Game>
     {
         public int Id { get; set; }
         public string Title { get; set; } = default!;
         public GameType Type { get; set; }
-        public int DmId { get; set; }
-        public PlayerDto Dm { get; set; } = new PlayerDto();
-        public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
-        public List<CharacterDto> Characters { get; set; } = new List<CharacterDto>();
+        public int? DmId { get; set; }
+        public PlayerDto? Dm { get; set; }
+        public List<PlayerDto> Players { get; set; } = [];
+        public List<CharacterDto> Characters { get; set; } = [];
+        public List<RollDto> Rolls { get; set; } = [];
 
         public void Mapping(Profile profile)
         {
@@ -38,58 +40,85 @@ public class GameListVm : PaginationMetaData
             .ForMember(dest => dest.Players
                 , ops => ops.MapFrom(src => MapPlayerList(src.Players)))
             .ForMember(dest => dest.Characters
-                , ops => ops.MapFrom(src => MapCharacterList(src.Characters)));
+                , ops => ops.MapFrom(src => MapCharacterList(src.Characters)))
+            .ForMember(dest => dest.Rolls
+                , ops => ops.MapFrom(src => MapRollList(src.Rolls)));
         }
 
         public List<CharacterDto> MapCharacterList(ICollection<Character> list)
         {
-            List<CharacterDto> characterListToReturn = new List<CharacterDto>();
+            if (list == null) return [];
 
-            if (list != null)
-            {
-                foreach (var character in list) { characterListToReturn.Add(MapCharacter(character)); };
-            }
+            List<CharacterDto> characterListToReturn = new List<CharacterDto>();
+            foreach (var character in list) { characterListToReturn.Add(MapCharacter(character)); }
 
             return characterListToReturn;
         }
 
         public CharacterDto MapCharacter(Character character)
         {
-            CharacterDto characterToReturn = new CharacterDto();
-
-            if (character != null)
+            return new CharacterDto
             {
-                characterToReturn.Id = character.Id;
-                characterToReturn.Name = character.Name;
-                characterToReturn.GameId = character.GameId;
-                characterToReturn.PlayerId = character.PlayerId;
-                characterToReturn.Image = character.Image ?? "";
+                Id = character.Id,
+                Name = character.Name,
+                Image = character.Image,
+                GameId = character.GameId,
+                PlayerId = character.PlayerId
+            };
+        }
+
+        public List<RollDto> MapRollList(ICollection<Roll> rollList)
+        {
+            List<RollDto> rollListToReturn = new List<RollDto>();
+
+            if (rollList != null)
+            {
+                foreach (var roll in rollList)
+                {
+                    rollListToReturn.Add(
+                    new RollDto
+                    {
+                        Id = roll.Id,
+                        Title = roll.Title,
+                        Description = roll.Description,
+                        Difficulty = roll.Difficulty,
+                        GameId = roll.GameId ?? 0,
+                        CharacterId = roll.CharacterId,
+                        PlayerId = roll.PlayerId,
+                        DicePool = roll.DicePool.ToList(),
+                        Result = roll.Result.ToList()
+                    });
+                }
             }
-            return characterToReturn;
+            return rollListToReturn;
         }
 
         public List<PlayerDto> MapPlayerList(ICollection<Player> list)
         {
-            List<PlayerDto> playerListToReturn = new List<PlayerDto>();
+            if (list == null) return [];
 
-            if (list != null)
+            List<PlayerDto> playerListToReturn = new List<PlayerDto>();
+            foreach (var player in list)
             {
-                foreach (var player in list) { playerListToReturn.Add(MapPlayer(player)); };
+                var playerToAdd = MapPlayer(player);
+
+                if (playerToAdd != null)
+                    playerListToReturn.Add(playerToAdd);
             }
 
             return playerListToReturn;
         }
 
-        public PlayerDto MapPlayer(Player player)
+        public PlayerDto? MapPlayer(Player player)
         {
+            if (player == null) return null;
+
             PlayerDto playerToReturn = new PlayerDto();
 
-            if (player != null)
-            {
-                playerToReturn.Id = player.Id;
-                playerToReturn.UserName = player.UserName;
-                playerToReturn.Email = player.Email ?? "";
-            }
+            playerToReturn.Id = player.Id;
+            playerToReturn.UserName = player.UserName;
+            playerToReturn.Email = player.Email;
+
             return playerToReturn;
         }
     }

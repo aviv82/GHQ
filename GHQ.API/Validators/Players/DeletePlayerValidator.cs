@@ -10,7 +10,7 @@ public class DeletePlayerValidator : AbstractValidator<DeletePlayerRequest>
 {
     public DeletePlayerValidator(IGHQContext context)
     {
-        RuleFor(x => x.Id).ValidateExistence<DeletePlayerRequest, Player>(context);
+        RuleFor(x => x.Id).ValidateExistence<DeletePlayerRequest, Player>(context).WithMessage("Player does not exist.");
     }
 }
 

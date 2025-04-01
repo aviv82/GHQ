@@ -1,4 +1,5 @@
 ﻿using GHQ.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GHQ.Data.EntityConfiguration;
@@ -11,17 +12,19 @@ public class GameConfiguration : BaseEntityConfiguration<Game>
 
     protected override void ConfigureEntity(EntityTypeBuilder<Game> builder)
     {
-        builder.Property(x => x.Title).IsRequired().HasMaxLength(256);
+        builder.Property(x => x.Title)
+        .IsRequired()
+        .HasMaxLength(256);
+
         builder.Property(x => x.Type);
 
         builder.HasOne(x => x.Dm)
             .WithMany(y => y.DmGames)
-            .HasForeignKey(z => z.DmId)
-            .IsRequired();
+            .HasForeignKey(z => z.DmId);
 
-        builder.HasMany(e => e.Players)
-            .WithMany(e => e.PlayerGames)
-            .UsingEntity<PlayerGame>();
+        builder.HasMany(x => x.Players)
+                .WithMany(e => e.PlayerGames)
+                .UsingEntity<PlayerGame>();
 
         builder.HasMany(e => e.Characters)
             .WithOne(e => e.Game)

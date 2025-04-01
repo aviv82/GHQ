@@ -4,6 +4,7 @@ using GHQ.Core.Mappings;
 using GHQ.Data.Entities;
 using static GHQ.Core.CharacterLogic.Models.CharacterListVm;
 using static GHQ.Core.GameLogic.Models.GameListVm;
+using static GHQ.Core.RollLogic.Models.RollListVm;
 
 namespace GHQ.Core.PlayerLogic.Models;
 
@@ -16,9 +17,9 @@ public class PlayerListVm : PaginationMetaData
         public int Id { get; set; }
         public string UserName { get; set; } = default!;
         public string? Email { get; set; }
-        public List<GameDto> PlayerGames { get; set; } = new List<GameDto>();
-        public List<GameDto> DmGames { get; set; } = new List<GameDto>();
-        public List<CharacterDto> Characters { get; set; } = new List<CharacterDto>();
+        public List<GameDto> PlayerGames { get; set; } = [];
+        public List<GameDto> DmGames { get; set; } = [];
+        public List<CharacterDto> Characters { get; set; } = [];
 
         public void Mapping(Profile profile)
         {
@@ -28,7 +29,7 @@ public class PlayerListVm : PaginationMetaData
             .ForMember(dest => dest.UserName
                 , ops => ops.MapFrom(src => src.UserName))
             .ForMember(dest => dest.Email
-                , ops => ops.MapFrom(src => src.Email ?? ""))
+                , ops => ops.MapFrom(src => src.Email ?? string.Empty))
             .ForMember(dest => dest.PlayerGames
                 , ops => ops.MapFrom(src => MapGames(src.PlayerGames)))
             .ForMember(dest => dest.DmGames
@@ -39,37 +40,37 @@ public class PlayerListVm : PaginationMetaData
 
         public List<CharacterDto> MapCharacters(ICollection<Character> characters)
         {
+            if (characters == null) return [];
+
             List<CharacterDto> charactersToReturn = new List<CharacterDto>();
 
-            if (characters != null)
-            {
-                characters.ToList().ForEach(x => charactersToReturn.Add(
-                                new CharacterDto
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    GameId = x.GameId,
-                                    PlayerId = x.PlayerId,
-                                    Image = x.Image ?? ""
-                                }));
-            }
+            characters.ToList().ForEach(x => charactersToReturn.Add(
+                            new CharacterDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                GameId = x.GameId,
+                                PlayerId = x.PlayerId,
+                                Image = x.Image
+                            }));
+
             return charactersToReturn;
         }
         public List<GameDto> MapGames(ICollection<Game> games)
         {
+            if (games == null) return [];
+
             List<GameDto> gamesToReturn = new List<GameDto>();
 
-            if (games != null)
-            {
-                games.ToList().ForEach(x => gamesToReturn.Add(
-                                new GameDto
-                                {
-                                    Id = x.Id,
-                                    DmId = x.DmId,
-                                    Title = x.Title,
-                                    Type = x.Type
-                                }));
-            }
+            games.ToList().ForEach(x => gamesToReturn.Add(
+                            new GameDto
+                            {
+                                Id = x.Id,
+                                DmId = x.DmId,
+                                Title = x.Title,
+                                Type = x.Type
+                            }));
+
             return gamesToReturn;
         }
     }

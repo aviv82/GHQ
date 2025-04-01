@@ -10,6 +10,6 @@ public class DeleteCharacterValidator : AbstractValidator<DeleteCharacterRequest
 {
     public DeleteCharacterValidator(IGHQContext context)
     {
-        RuleFor(x => x.Id).ValidateExistence<DeleteCharacterRequest, Character>(context);
+        RuleFor(x => x.Id).ValidateExistence<DeleteCharacterRequest, Character>(context).WithMessage("Character does not exist."); ;
     }
 }

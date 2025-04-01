@@ -51,6 +51,20 @@ public class CharacterHandler : ICharacterHandler
         };
     }
 
+    public async Task<CharacterDto> GetCharacterSheetById(
+       GetCharacterByIdQuery request,
+       CancellationToken cancellationToken)
+    {
+        Character? query = await _characterService.GetCharacterByIdIncludingTraitGroupsAndTraits(request.Id, cancellationToken);
+
+        if (query == null) { throw new Exception("Character not found"); }
+
+        List<Character> characterList = new List<Character> { query };
+
+        var toReturn = characterList.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider);
+
+        return toReturn.First();
+    }
 
     public async Task<CharacterDto> GetCharacterById(
        GetCharacterByIdQuery request,
@@ -73,15 +87,12 @@ public class CharacterHandler : ICharacterHandler
     {
         try
         {
-
             Character characterToAdd = new Character
             {
                 Name = request.Name,
-                Image = request.Image ?? "",
+                Image = request.Image,
                 GameId = request.GameId,
-                Game = new Game(),
                 PlayerId = request.PlayerId,
-                Player = new Player(),
             };
 
             Player player = await _playerService.GetByIdAsync(request.PlayerId, cancellationToken) ?? new Player();
@@ -90,12 +101,11 @@ public class CharacterHandler : ICharacterHandler
             Game game = await _gameService.GetByIdAsync(request.GameId, cancellationToken) ?? new Game();
             characterToAdd.Game = game;
 
-
             Character newCharacter = await _characterService.InsertAsync(characterToAdd, cancellationToken);
 
-            List<Character> chracterAsQueryable = new List<Character> { newCharacter };
+            List<Character> characterAsQueryable = new List<Character> { newCharacter };
 
-            return chracterAsQueryable.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider).First();
+            return characterAsQueryable.AsQueryable().ProjectTo<CharacterDto>(_mapper.ConfigurationProvider).First();
         }
         catch (Exception ex)
         {
@@ -112,7 +122,8 @@ public class CharacterHandler : ICharacterHandler
         {
             var character = await _characterService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (character == null) { throw new Exception("Character not found"); };
+            if (character == null) { throw new Exception("Character not found"); }
+            ;
 
             character.Name = request.Name;
             if (request.Image != null)
@@ -137,11 +148,9 @@ public class CharacterHandler : ICharacterHandler
         {
             var character = await _characterService.GetByIdAsync(request.Id, cancellationToken);
 
-            if (character == null) { throw new Exception("Character not found"); };
+            if (character == null) { throw new Exception("Character not found"); }
 
-            await _characterService.UpdateAsync(character, cancellationToken);
-
-            await _characterService.DeleteAsync(character, cancellationToken);
+            await _characterService.DeleteCascadeAsync(request.Id, cancellationToken);
         }
         catch (Exception ex)
         {
